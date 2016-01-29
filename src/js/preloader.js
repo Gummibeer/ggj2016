@@ -1,10 +1,11 @@
-var preloader = function(game) {};
+var preloader = function (game) {
+};
 
 preloader.prototype = {
-    preload: function() {
+    preload: function () {
         console.log('preloader.preload');
     },
-    create: function() {
+    create: function () {
         console.log('preloader.create');
         this.game.state.start('Menu');
     }

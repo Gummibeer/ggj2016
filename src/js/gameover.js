@@ -1,10 +1,11 @@
-var gameover = function(game) {};
+var gameover = function (game) {
+};
 
 gameover.prototype = {
-    preload: function() {
+    preload: function () {
         console.log('gameover.preload');
     },
-    create: function() {
+    create: function () {
         console.log('gameover.create');
         this.game.stage.backgroundColor = '#880000';
     }
