@@ -1,15 +1,15 @@
-var preloader = function (game) {
+var load = function (game) {
 };
 
-preloader.prototype = {
+load.prototype = {
     preload: function () {
-        console.log('preloader.preload');
+        console.log('load.preload');
         var loadingBar = this.add.sprite(160, 240, "loading");
         loadingBar.anchor.setTo(0.5, 0.5);
         this.load.setPreloadSprite(loadingBar);
     },
     create: function () {
-        console.log('preloader.create');
+        console.log('load.create');
         this.game.state.start('Menu');
     }
 };
