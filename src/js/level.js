@@ -63,7 +63,7 @@ level.prototype = {
         this.createPlayer();
         this.createObjects();
         this.foreground = this.map.createLayer(this.config.layerForeground);
-        //this.layer.debug = true;
+        this.layer.debug = true;
         this.layer.resizeWorld();
         this.game.physics.p2.convertTilemap(this.map, this.layer);
     },
@@ -357,7 +357,7 @@ level.prototype = {
             if (body.sprite.key == 'spike' || body.sprite.key == 'stamp') {
                 this.killPlayer();
             }
-            if (this.player.attachedBody == null && this.takeButton.isDown && (body.sprite.key == 'item' || body.sprite.key == 'box')) {
+            if (this.player.attachedBody == null && this.takeButton.isDown && (body.sprite.key == 'item' || body.sprite.key == 'box' || body.sprite.key == 'spring')) {
                 console.log('take item');
                 body.data.shapes[0].sensor = true;
                 body.fixedRotation = true;
