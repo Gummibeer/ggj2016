@@ -13,6 +13,9 @@ level.prototype = {
     jumpTimer: 0,
     facing: 'right',
     playerMaterial: null,
+    levelTimer: null,
+    canMove: true,
+    currentRitual: null,
 
     config: null,
     platformVelocity: 150,
@@ -42,7 +45,7 @@ level.prototype = {
         this.createPlayer();
         this.createObjects();
 
-        this.game.time.events.add(Phaser.Timer.SECOND * this.config.leveltime, this.killPlayer, this);
+        this.levelTimer = this.game.time.events.add(Phaser.Timer.SECOND * this.config.leveltime, this.killPlayer, this);
 
         this.cursors = this.game.input.keyboard.createCursorKeys();
         this.jumpButton = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
@@ -113,7 +116,21 @@ level.prototype = {
             this.vPlatforms[i] = this.createPlatform(data.x, data.y1);
             this.vPlatformVelocities[i] = this.platformVelocity;
         }
+        for (i = 0; i < this.config.rituals.length; i++) {
+            data = this.config.rituals[i];
+            this.createRitual(data.position.x, data.position.y, data.task);
+        }
     },
+    createRitual: function(xAnchor, yAnchor, task) {
+        var ritual = this.game.add.sprite(xAnchor,yAnchor, 'ritual');
+        this.game.physics.p2.enable(ritual);
+        ritual.body.fixedRotation = true;
+        ritual.body.static = true;
+        ritual.bean = {};
+        ritual.bean.task = task;
+        return ritual;
+    },
+
     createPlatform: function (xAnchor, yAnchor) {
         var platform = this.game.add.sprite(xAnchor, yAnchor, 'brick');
         this.game.physics.p2.enable(platform);
@@ -184,8 +201,10 @@ level.prototype = {
         }
     },
     update: function () {
-        this.movement();
-        this.platformMovement();
+        if(this.canMove) {
+            this.movement();
+            this.platformMovement();
+        }
 
         if (this.player.constraint != null && this.dropButton.isDown) {
             console.log('drop item');
@@ -293,11 +312,27 @@ level.prototype = {
                 body.fixedRotation = true;
                 this.player.attachedBody = body;
                 this.player.constraint = this.game.physics.p2.createLockConstraint(this.player, this.player.attachedBody, [0, 16], 0);
+            } else if (body.sprite.key == 'ritual'){
+                this.processRitual(body.sprite);
             }
         } else {
             console.log('wall');
         }
     },
+    processRitual: function(sprite) {
+        console.log('ritual started', sprite);
+        this.levelTimer.timer.pause();
+        this.canMove = false;
+        if(this.currentRitual == null) {
+            this.currentRitual = new BeanRitual();
+            this.currentRitual.start(this.game,sprite.bean.task, this.ritualFinished);
+        }
+    },
+
+    ritualFinished: function() {
+
+    },
+
     objectHit: function (body, bodyB, shapeA, shapeB, equation) {
         if (body == null || (body.sprite && body.sprite.key == 'spike')) {
             if (equation[0] != undefined) {

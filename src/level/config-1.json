@@ -63,5 +63,17 @@
       "y1": 416,
       "y2": 640
     }
+  ],
+  "rituals": [
+    {
+      "position": {
+        "x": 256,
+        "y": 416
+      },
+      "task": {
+        "time": 5,
+        "keys": ["1","A","F","G","SPACEBAR","SPACEBAR"]
+      }
+    }
   ]
 }
