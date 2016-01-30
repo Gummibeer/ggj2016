@@ -7,7 +7,7 @@ var BeanRitual = function() {
 
     this.start = function(game, task, callback) {
 
-        callback();
+        callback(true);
     };
 
     _init();

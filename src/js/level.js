@@ -324,7 +324,7 @@ level.prototype = {
                 this.player.attachedBody = body;
                 this.player.constraint = this.game.physics.p2.createLockConstraint(this.player, this.player.attachedBody, [0, 16], 0);
             } else if (body.sprite.key == 'ritual'){
-                this.processRitual(body.sprite);
+                this.processRitual(body);
             } else if (body.sprite.key == 'teleporter'){
                 var dest = body.sprite.playerDestination;
                 this.player.body.x = dest.x;
@@ -335,23 +335,27 @@ level.prototype = {
         }
     },
     processRitual: function(spriteBody) {
+        var that = this;
         console.log('ritual started', spriteBody.sprite);
         this.levelTimer.timer.pause();
         this.canMove = false;
         this.player.animations.stop();
         if(this.currentRitual == null) {
             this.currentRitual = new BeanRitual();
-            this.currentRitual.start(this.game,spriteBody.sprite.bean.task, function(succeed){this.ritualFinished(succeed,spriteBody)});
+            this.currentRitual.start(this.game,spriteBody.sprite.bean.task, function(succeed){that.ritualFinished(succeed,spriteBody)});
         }
     },
 
     ritualFinished: function(succeed, spriteBody) {
         if(succeed) {
+            console.log('finished ritual')
             this.currentRitual = null;
             spriteBody.sprite.destroy();
             spriteBody.destroy();
+            this.levelTimer.timer.resume();
+            this.canMove = true;
         } else {
-            console.log('failed on fonishing ritual');
+            console.log('failed on finishing ritual');
         }
     },
 
