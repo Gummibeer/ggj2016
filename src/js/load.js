@@ -32,13 +32,18 @@ load.prototype = {
         this.game.load.image('background-1', 'src/img/level_1/background.jpg');
 
         // Level 2
+        this.game.load.tilemap('map-2', 'src/level/map-2.json', null, Phaser.Tilemap.TILED_JSON);
+        this.game.load.image('tiles-2', 'src/level/tiles-2.png');
+        this.game.load.json('config-2', 'src/level/config-2.json');
         this.game.load.image('background-2', 'src/img/level_2/background.jpg');
 
         // GameOver
         this.game.load.spritesheet('gameover', 'src/img/gameover/background.jpg', 1280, 720);
+        this.game.load.audio('gameover', ['src/audio/gameover.mp3', 'src/audio/gameover.ogg']);
 
         // GameWon
         this.game.load.spritesheet('gamewon', 'src/img/gamewon/background.jpg', 1280, 720);
+        this.game.load.audio('gamewon', ['src/audio/gamewon.mp3', 'src/audio/gamewon.ogg']);
     },
     create: function () {
         console.log('load.create');
