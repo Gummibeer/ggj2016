@@ -1,6 +1,6 @@
 {
   "background": "background-1",
-  "leveltime": 120,
+  "leveltime": 60,
   "map": "map-1",
   "tilesCollision": "tiles-1",
   "tilesForeground": "foreground-1",
@@ -13,22 +13,13 @@
   },
 
   "chains": [
-    {
-      "l": 5,
-      "x": -1184,
-      "y": 896
-    }
   ],
   "boxes": [
-    {
-      "x": 496,
-      "y": 416
-    }
   ],
   "springs": [
     {
-      "x": 10,
-      "y": 10
+      "x": 512,
+      "y": 1376
     }
   ],
   "spikes": [
@@ -38,16 +29,12 @@
     }
   ],
   "items": [
-    {
-      "x": 400,
-      "y": 940
-    }
   ],
   "hPlatforms": [
     {
-      "x1": 496,
-      "x2": 1256,
-      "y": 416
+      "x1": 960,
+      "x2": 1408,
+      "y": 1248
     }
   ],
   "vPlatforms": [
@@ -60,8 +47,28 @@
   "rituals": [
     {
       "position": {
-        "x": 1472,
+        "x": 512,
+        "y": 1376
+      },
+      "task": {
+        "time": 5,
+        "keys": ["b","a","f","g"]
+      }
+    },
+    {
+      "position": {
+        "x": 1440,
         "y": 64
+      },
+      "task": {
+        "time": 5,
+        "keys": ["b","a","f","g"]
+      }
+    },
+    {
+      "position": {
+        "x": 1696,
+        "y": 896
       },
       "task": {
         "time": 5,
@@ -70,14 +77,6 @@
     }
   ],
   "teleporters": [
-    {
-      "x": -350,
-      "y": 416,
-      "dest": {
-        "x": 500,
-        "y": 750
-      }
-    }
   ],
   "stamps": [
     {
