@@ -31,6 +31,7 @@ level.prototype = {
     fontReady: false,
 
     config: null,
+    rituals: [],
     stampVelocity: 100,
     stamps: [],
     stampVelocities: [],
@@ -144,7 +145,7 @@ level.prototype = {
         }
         for (i = 0; i < this.config.rituals.length; i++) {
             data = this.config.rituals[i];
-            this.createRitual(data.position.x, data.position.y, data.task);
+            this.rituals[i] = this.createRitual(data.position.x, data.position.y, data.task);
         }
         for (i = 0; i < this.config.teleporters.length; i++) {
             data = this.config.teleporters[i];
@@ -260,6 +261,7 @@ level.prototype = {
             this.movement();
             this.platformMovement();
             this.stampMovement();
+            this.ritualRotate();
         }
 
         if (this.solvedRituals == this.config.rituals.length) {
@@ -274,6 +276,11 @@ level.prototype = {
             this.player.attachedBody.data.shapes[0].sensor = false;
             this.player.attachedBody = null;
             this.player.frame = 2;
+        }
+    },
+    ritualRotate: function() {
+        for (var i = 0; i < this.rituals.length; i++) {
+            this.rituals[i].angle += 1;;
         }
     },
     stampMovement: function () {
