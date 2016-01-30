@@ -12,6 +12,6 @@ gameover.prototype = {
         this.bg = this.game.add.sprite('center', 'center', 'gameover');
         var anim = this.bg.animations.add('play', [0, 1, 2, 3], 1, true);
         anim.loop = false;
-        anim.play('play');
+        anim.play();
     }
 };
