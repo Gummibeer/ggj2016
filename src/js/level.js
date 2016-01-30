@@ -1,6 +1,17 @@
 var level = function (game) {
 };
 
+WebFontConfig = {
+    active: function() {
+        window.fontReady=true;
+    },
+    //  The Google Fonts we want to load (specify as many as you like in the array)
+    google: {
+        families: ['Lato:400,900:latin']
+    }
+
+};
+
 level.prototype = {
     bg: null,
     map: null,
@@ -17,6 +28,7 @@ level.prototype = {
     levelTimer: null,
     canMove: true,
     currentRitual: null,
+    fontReady: false,
 
     config: null,
     stampVelocity: 100,
@@ -35,6 +47,7 @@ level.prototype = {
     },
     preload: function () {
         console.log('level.preload: ' + this.config);
+        this.game.load.script('webfont', '//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js');
     },
     create: function () {
         console.log('level.create: ' + this.config);
