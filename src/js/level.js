@@ -13,8 +13,14 @@ level.prototype = {
     jumpTimer: 0,
     facing: 'right',
     playerMaterial: null,
+    levelTimer: null,
+    canMove: true,
+    currentRitual: null,
 
     config: null,
+    stampVelocity: 100,
+    stamps: [],
+    stampVelocities: [],
     platformVelocity: 150,
     hPlatforms: [],
     hPlatformVelocities: [],
@@ -42,7 +48,7 @@ level.prototype = {
         this.createPlayer();
         this.createObjects();
 
-        this.game.time.events.add(Phaser.Timer.SECOND * this.config.leveltime, this.killPlayer, this);
+        this.levelTimer = this.game.time.events.add(Phaser.Timer.SECOND * this.config.leveltime, this.killPlayer, this);
 
         this.cursors = this.game.input.keyboard.createCursorKeys();
         this.jumpButton = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
@@ -113,9 +119,47 @@ level.prototype = {
             this.vPlatforms[i] = this.createPlatform(data.x, data.y1);
             this.vPlatformVelocities[i] = this.platformVelocity;
         }
+        for (i = 0; i < this.config.rituals.length; i++) {
+            data = this.config.rituals[i];
+            this.createRitual(data.position.x, data.position.y, data.task);
+        }
+        for (i = 0; i < this.config.teleporters.length; i++) {
+            data = this.config.teleporters[i];
+            this.createTeleporter(data.x, data.y, data.dest);
+        }
+        for (i = 0; i < this.config.stamps.length; i++) {
+            data = this.config.stamps[i];
+            this.stamps[i] = this.createStamp(data.x, data.y1);
+            this.stampVelocities[i] = this.stampVelocity;
+        }
+    },
+    createStamp: function (xAnchor, yAnchor) {
+        var stamp = this.game.add.sprite(xAnchor, yAnchor, 'stamp');
+        this.game.physics.p2.enable(stamp);
+        stamp.body.mass = 9999;
+        stamp.body.data.gravityScale = 0;
+        stamp.body.data.motionState = 1;
+        stamp.body.fixedRotation = true;
+        return stamp;
+    },
+    createTeleporter: function(xAnchor, yAnchor, dest) {
+        var teleporter = this.game.add.sprite(xAnchor, yAnchor, 'teleporter');
+        this.game.physics.p2.enable(teleporter);
+        teleporter.body.fixedRotation = true;
+        teleporter.body.static = true;
+        teleporter.playerDestination = dest;
+    },
+    createRitual: function(xAnchor, yAnchor, task) {
+        var ritual = this.game.add.sprite(xAnchor,yAnchor, 'ritual');
+        this.game.physics.p2.enable(ritual);
+        ritual.body.fixedRotation = true;
+        ritual.body.static = true;
+        ritual.bean = {};
+        ritual.bean.task = task;
+        return ritual;
     },
     createPlatform: function (xAnchor, yAnchor) {
-        var platform = this.game.add.sprite(xAnchor, yAnchor, 'brick');
+        var platform = this.game.add.sprite(xAnchor, yAnchor, 'platform');
         this.game.physics.p2.enable(platform);
         platform.body.mass = 9999;
         platform.body.data.gravityScale = 0;
@@ -184,8 +228,11 @@ level.prototype = {
         }
     },
     update: function () {
-        this.movement();
-        this.platformMovement();
+        if(this.canMove) {
+            this.movement();
+            this.platformMovement();
+            this.stampMovement();
+        }
 
         if (this.player.constraint != null && this.dropButton.isDown) {
             console.log('drop item');
@@ -194,6 +241,21 @@ level.prototype = {
             this.player.attachedBody.fixedRotation = false;
             this.player.attachedBody.data.shapes[0].sensor = false;
             this.player.attachedBody = null;
+            this.player.frame = 2;
+        }
+    },
+    stampMovement: function () {
+        var i;
+        var data;
+        for (i = 0; i < this.stamps.length; i++) {
+            data = this.config.stamps[i];
+            if (this.stamps[i].body.y < data.y1) {
+                this.stampVelocities[i] *= -1;
+            } else if (this.stamps[i].body.y > data.y2) {
+                this.stampVelocities[i] *= -1;
+            }
+            this.stamps[i].body.velocity.y = this.stampVelocities[i];
+            this.stamps[i].body.x = data.x;
         }
     },
     platformMovement: function () {
@@ -258,6 +320,9 @@ level.prototype = {
         }
 
         if ((this.jumpButton.isDown || this.cursors.up.isDown) && this.checkIfCanJump() && this.game.time.now > this.jumpTimer) {
+            if(this.facing == 'idle') {
+                this.player.frame = 2;
+            }
             this.player.body.moveUp(500);
             this.jumpTimer = this.game.time.now + 750;
         }
@@ -284,7 +349,7 @@ level.prototype = {
             this.killPlayer();
         } else if (body.sprite) {
             console.log(body.sprite.key);
-            if (body.sprite.key == 'spike') {
+            if (body.sprite.key == 'spike' || body.sprite.key == 'stamp') {
                 this.killPlayer();
             }
             if (this.player.attachedBody == null && this.takeButton.isDown && (body.sprite.key == 'item' || body.sprite.key == 'box')) {
@@ -293,11 +358,42 @@ level.prototype = {
                 body.fixedRotation = true;
                 this.player.attachedBody = body;
                 this.player.constraint = this.game.physics.p2.createLockConstraint(this.player, this.player.attachedBody, [0, 16], 0);
+            } else if (body.sprite.key == 'ritual'){
+                this.processRitual(body);
+            } else if (body.sprite.key == 'teleporter'){
+                var dest = body.sprite.playerDestination;
+                this.player.body.x = dest.x;
+                this.player.body.y = dest.y;
             }
         } else {
             console.log('wall');
         }
     },
+    processRitual: function(spriteBody) {
+        var that = this;
+        console.log('ritual started', spriteBody.sprite);
+        this.levelTimer.timer.pause();
+        this.canMove = false;
+        this.player.animations.stop();
+        if(this.currentRitual == null) {
+            this.currentRitual = new BeanRitual();
+            this.currentRitual.start(this.game,spriteBody.sprite.bean.task, function(succeed){that.ritualFinished(succeed,spriteBody)});
+        }
+    },
+
+    ritualFinished: function(succeed, spriteBody) {
+        if(succeed) {
+            console.log('finished ritual')
+            this.currentRitual = null;
+            spriteBody.sprite.destroy();
+            spriteBody.destroy();
+            this.levelTimer.timer.resume();
+            this.canMove = true;
+        } else {
+            console.log('failed on finishing ritual');
+        }
+    },
+
     objectHit: function (body, bodyB, shapeA, shapeB, equation) {
         if (body == null || (body.sprite && body.sprite.key == 'spike')) {
             if (equation[0] != undefined) {
