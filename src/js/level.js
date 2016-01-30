@@ -2,8 +2,8 @@ var level = function (game) {
 };
 
 WebFontConfig = {
-    active: function() {
-        window.fontReady=true;
+    active: function () {
+        window.fontReady = true;
     },
     //  The Google Fonts we want to load (specify as many as you like in the array)
     google: {
@@ -31,6 +31,7 @@ level.prototype = {
     fontReady: false,
 
     config: null,
+    rituals: [],
     stampVelocity: 100,
     stamps: [],
     stampVelocities: [],
@@ -47,7 +48,6 @@ level.prototype = {
     },
     preload: function () {
         console.log('level.preload: ' + this.config);
-        this.game.load.script('webfont', '//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js');
     },
     create: function () {
         console.log('level.create: ' + this.config);
@@ -59,6 +59,8 @@ level.prototype = {
 
         this.bg = this.game.add.tileSprite(0, 0, this.game.width, this.game.height, this.config.background);
         this.bg.fixedToCamera = true;
+
+        this.playerMaterial = this.game.physics.p2.createMaterial();
 
         this.createTilemap();
 
@@ -75,8 +77,8 @@ level.prototype = {
         this.map.addTilesetImage(this.config.tilesForeground);
         this.map.setCollisionByExclusion([]);
         this.layer = this.map.createLayer(this.config.layerCollision);
-        this.createPlayer();
         this.createObjects();
+        this.createPlayer();
         this.foreground = this.map.createLayer(this.config.layerForeground);
         this.layer.debug = true;
         this.layer.resizeWorld();
@@ -87,10 +89,13 @@ level.prototype = {
         this.player.scale.x = 0.35;
         this.player.scale.y = 0.35;
         this.game.physics.p2.enable(this.player);
+        this.player.body.setCircle(25);
+        this.player.anchor.setTo(0.5, 0.6);
         this.player.body.collideWorldBounds = true;
         this.player.body.fixedRotation = true;
         this.player.body.x = this.config.player.x;
         this.player.body.y = this.config.player.y;
+        this.player.body.debug = true;
         this.player.animations.add('left', [4, 3], 20, true);
         this.player.animations.add('turn', [2], 40, true);
         this.player.animations.add('right', [0, 1], 20, true);
@@ -101,7 +106,6 @@ level.prototype = {
 
         this.game.camera.follow(this.player);
         this.player.body.onBeginContact.add(this.playerHit, this);
-        this.playerMaterial = this.game.physics.p2.createMaterial();
         this.player.body.setMaterial(this.playerMaterial);
         return this.player;
     },
@@ -140,7 +144,7 @@ level.prototype = {
         }
         for (i = 0; i < this.config.rituals.length; i++) {
             data = this.config.rituals[i];
-            this.createRitual(data.position.x, data.position.y, data.task);
+            this.rituals[i] = this.createRitual(data.position.x, data.position.y, data.task);
         }
         for (i = 0; i < this.config.teleporters.length; i++) {
             data = this.config.teleporters[i];
@@ -155,6 +159,7 @@ level.prototype = {
     createStamp: function (xAnchor, yAnchor) {
         var stamp = this.game.add.sprite(xAnchor, yAnchor, 'stamp');
         this.game.physics.p2.enable(stamp);
+        stamp.body.debug = true;
         stamp.body.mass = 9999;
         stamp.body.data.gravityScale = 0;
         stamp.body.data.motionState = 1;
@@ -171,6 +176,8 @@ level.prototype = {
     createRitual: function (xAnchor, yAnchor, task) {
         var ritual = this.game.add.sprite(xAnchor, yAnchor, 'ritual');
         this.game.physics.p2.enable(ritual);
+        ritual.body.setCircle(60);
+        ritual.body.debug = true;
         ritual.body.fixedRotation = true;
         ritual.body.static = true;
         ritual.bean = {};
@@ -180,6 +187,7 @@ level.prototype = {
     createPlatform: function (xAnchor, yAnchor) {
         var platform = this.game.add.sprite(xAnchor, yAnchor, 'platform');
         this.game.physics.p2.enable(platform);
+        platform.body.debug = true;
         platform.body.mass = 9999;
         platform.body.data.gravityScale = 0;
         platform.body.data.motionState = 1;
@@ -252,6 +260,7 @@ level.prototype = {
             this.movement();
             this.platformMovement();
             this.stampMovement();
+            this.ritualRotate();
         }
 
         if (this.solvedRituals == this.config.rituals.length) {
@@ -266,6 +275,12 @@ level.prototype = {
             this.player.attachedBody.data.shapes[0].sensor = false;
             this.player.attachedBody = null;
             this.player.frame = 2;
+        }
+    },
+    ritualRotate: function () {
+        for (var i = 0; i < this.rituals.length; i++) {
+            this.rituals[i].angle += 1;
+            ;
         }
     },
     stampMovement: function () {

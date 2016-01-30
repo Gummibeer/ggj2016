@@ -8,6 +8,8 @@ load.prototype = {
         loadingBar.anchor.setTo(0.5, 0.5);
         this.load.setPreloadSprite(loadingBar);
 
+        this.game.load.script('webfont', '//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js');
+
         this.game.load.spritesheet('bean', 'src/img/objects/bean.png', 163, 163);
         this.game.load.spritesheet('chain', 'src/img/objects/chain.png', 16, 26);
         this.game.load.image('box', 'src/img/objects/box.png');
