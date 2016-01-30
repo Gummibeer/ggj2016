@@ -418,7 +418,6 @@ level.prototype = {
             this.game.physics.p2.isPaused = false;
             this.game.paused = false;
             this.solvedRituals++;
-            this.player.frame = 2;
             if (this.solvedRituals == this.config.rituals.length) {
                 this.winPlayer();
             }

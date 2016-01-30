@@ -1,6 +1,6 @@
 {
   "background": "background-1",
-  "leveltime": 60,
+  "leveltime": 90,
   "map": "map-1",
   "tilesCollision": "tiles-1",
   "tilesForeground": "foreground-1",
