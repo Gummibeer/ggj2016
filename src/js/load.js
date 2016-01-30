@@ -8,7 +8,7 @@ load.prototype = {
         loadingBar.anchor.setTo(0.5, 0.5);
         this.load.setPreloadSprite(loadingBar);
 
-        this.game.load.spritesheet('dude', 'src/img/dude.png', 32, 48);
+        this.game.load.spritesheet('bean', 'src/img/bean.png', 163, 163);
         this.game.load.spritesheet('chain', 'src/img/chain.png', 16, 26);
         this.game.load.image('box', 'src/img/box.png');
         this.game.load.image('spring', 'src/img/spring.png');

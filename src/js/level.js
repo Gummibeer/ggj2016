@@ -59,15 +59,21 @@ level.prototype = {
         this.game.physics.p2.convertTilemap(this.map, this.layer);
     },
     createPlayer: function () {
-        this.player = this.game.add.sprite(32, 32, 'dude');
+        this.player = this.game.add.sprite(163, 163, 'bean');
+        this.player.scale.x = 0.25;
+        this.player.scale.y = 0.25;
         this.game.physics.p2.enable(this.player);
         this.player.body.collideWorldBounds = true;
         this.player.body.fixedRotation = true;
         this.player.body.x = this.config.player.x;
         this.player.body.y = this.config.player.y;
-        this.player.animations.add('left', [0, 1, 2, 3], 10, true);
-        this.player.animations.add('turn', [4], 20, true);
-        this.player.animations.add('right', [5, 6, 7, 8], 10, true);
+        this.player.animations.add('left', [4, 3], 20, true);
+        this.player.animations.add('turn', [2], 40, true);
+        this.player.animations.add('right', [0, 1], 20, true);
+
+        this.player.animations.add('left_w_item', [6, 5], 20, true);
+        this.player.animations.add('turn_w_item', [7], 20, true);
+        this.player.animations.add('right_w_item', [8, 9], 20, true);
 
         this.game.camera.follow(this.player);
         this.player.body.onBeginContact.add(this.playerHit, this);
@@ -221,20 +227,34 @@ level.prototype = {
             this.player.body.moveLeft(250);
 
             if (this.facing != 'left') {
-                this.player.animations.play('left');
+                if(this.player.attachedBody != null){
+                    this.player.animations.play('left_w_item');
+                } else {
+                    this.player.animations.play('left');
+                }
                 this.facing = 'left';
             }
         } else if (this.cursors.right.isDown) {
             this.player.body.moveRight(250);
 
             if (this.facing != 'right') {
-                this.player.animations.play('right');
+                if(this.player.attachedBody != null) {
+                    this.player.animations.play('right_w_item');
+                } else {
+                    this.player.animations.play('right');
+                }
                 this.facing = 'right';
             }
-        } else if (this.facing != 'idle') {
-            this.player.animations.stop();
-            this.player.frame = 4;
-            this.facing = 'idle';
+        } else {
+            if (this.facing != 'idle') {
+                this.player.animations.stop();
+                if(this.player.attachedBody != null){
+                    this.player.frame = 7;
+                } else {
+                    this.player.frame = 2;
+                }
+                this.facing = 'idle';
+            }
         }
 
         if ((this.jumpButton.isDown || this.cursors.up.isDown) && this.checkIfCanJump() && this.game.time.now > this.jumpTimer) {
