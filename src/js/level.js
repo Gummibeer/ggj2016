@@ -5,6 +5,7 @@ level.prototype = {
     bg: null,
     map: null,
     layer: null,
+    foreground: null,
     player: null,
     cursors: null,
     jumpButton: null,
@@ -57,9 +58,11 @@ level.prototype = {
     },
     createTilemap: function () {
         this.map = this.game.add.tilemap(this.config.map);
-        this.map.addTilesetImage(this.config.tiles);
+        this.map.addTilesetImage(this.config.tilesCollision);
+        this.map.addTilesetImage(this.config.tilesForeground);
         this.map.setCollisionByExclusion([]);
-        this.layer = this.map.createLayer(this.config.layer);
+        this.layer = this.map.createLayer(this.config.layerCollision);
+        this.foreground = this.map.createLayer(this.config.layerForeground);
         //this.layer.debug = true;
         this.layer.resizeWorld();
         this.game.physics.p2.convertTilemap(this.map, this.layer);

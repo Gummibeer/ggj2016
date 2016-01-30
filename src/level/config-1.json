@@ -2,9 +2,10 @@
   "background": "background-1",
   "leveltime": 120,
   "map": "map-1",
-  "tiles": "tiles-1",
-  "layer": "collision-level-1",
-  "foreground-layer": "foreground-level-1",
+  "tilesCollision": "tiles-1",
+  "tilesForeground": "foreground-1",
+  "layerCollision": "collision-level-1",
+  "layerForeground": "foreground-level-1",
   "player": {
     "x": 96,
     "y": 64

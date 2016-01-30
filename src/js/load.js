@@ -23,11 +23,15 @@ load.prototype = {
         // Level 1
         this.game.load.tilemap('map-1', 'src/level/map-1.json', null, Phaser.Tilemap.TILED_JSON);
         this.game.load.image('tiles-1', 'src/level/tiles-1.png');
+        this.game.load.image('foreground-1', 'src/level/foreground-1.png');
         this.game.load.json('config-1', 'src/level/config-1.json');
         this.game.load.image('background-1', 'src/img/level_1/background.jpg');
 
         // Level 2
         this.game.load.image('background-2', 'src/img/level_2/background.jpg');
+
+        // GameOver
+        this.game.load.spritesheet('gameover', 'src/img/gameover/background.jpg', 1408, 720);
     },
     create: function () {
         console.log('load.create');
