@@ -22,6 +22,6 @@ menu.prototype = {
     },
     click: function () {
         console.log('button click');
-        this.game.state.start('Level1');
+        this.game.state.start('Level', true, false, 'config-1');
     }
 };

@@ -5,7 +5,7 @@ game.state.add('Load', load);
 game.state.add('Menu', menu);
 game.state.add('Progress', progress);
 
-game.state.add('Level1', level_1);
+game.state.add('Level', level);
 
 game.state.add('GameWon', gamewon);
 game.state.add('GameOver', gameover);

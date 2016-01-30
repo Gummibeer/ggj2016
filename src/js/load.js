@@ -10,11 +10,18 @@ load.prototype = {
 
         this.game.load.spritesheet('dude', 'src/img/dude.png', 32, 48);
         this.game.load.spritesheet('chain', 'src/img/chain.png', 16, 26);
+        this.game.load.image('box', 'src/img/box.png');
+        this.game.load.image('spring', 'src/img/spring.png');
+        this.game.load.image('spike', 'src/img/spike.png');
+        this.game.load.image('item', 'src/img/item.png');
+
+        this.game.load.image('brick', 'src/img/brick.png');
+        this.game.load.image('weight', 'src/img/weight.png');
 
         // Level 1
         this.game.load.tilemap('map-1', 'src/level/map-1.json', null, Phaser.Tilemap.TILED_JSON);
         this.game.load.image('tiles-1', 'src/level/tiles-1.png');
-        this.game.load.json('objects-1', 'src/level/objects-1.json');
+        this.game.load.json('config-1', 'src/level/config-1.json');
         this.game.load.image('background-1', 'src/img/level_1/background.jpg');
 
         // Level 2
