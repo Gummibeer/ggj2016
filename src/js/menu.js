@@ -2,13 +2,15 @@ var menu = function (game) {
 };
 
 menu.prototype = {
+    bg: null,
     preload: function () {
         console.log('menu.preload');
     },
     create: function () {
         console.log('menu.create');
 
-        this.game.stage.backgroundColor = '#182d3b';
+        this.bg = this.game.add.tileSprite(0, 0, this.game.width, this.game.height, 'menuscreen');
+        this.bg.fixedToCamera = true;
 
         button = this.game.add.button(this.game.world.centerX - 95, 400, 'button', this.click, this, 2, 1, 0);
         button.onInputOver.add(this.over, this);

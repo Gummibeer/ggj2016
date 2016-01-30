@@ -20,6 +20,9 @@ load.prototype = {
         this.game.load.image('teleporter', 'src/img/teleporter.png');
         this.game.load.image('stamp', 'src/img/stamp.png');
 
+        // Menu-Screen
+        this.game.load.image('menuscreen', 'src/img/menuscreen.jpg');
+
         // Level 1
         this.game.load.tilemap('map-1', 'src/level/map-1.json', null, Phaser.Tilemap.TILED_JSON);
         this.game.load.image('tiles-1', 'src/level/tiles-1.png');
