@@ -391,6 +391,8 @@ level.prototype = {
             this.resume();
         } else {
             console.log('failed on finishing ritual');
+            this.levelTimer.timer.resume();
+            this.canMove = true;
         }
     },
     objectHit: function (body, bodyB, shapeA, shapeB, equation) {
