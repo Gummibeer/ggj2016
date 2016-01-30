@@ -8,17 +8,19 @@ load.prototype = {
         loadingBar.anchor.setTo(0.5, 0.5);
         this.load.setPreloadSprite(loadingBar);
 
-        this.game.load.spritesheet('bean', 'src/img/bean.png', 163, 163);
-        this.game.load.spritesheet('chain', 'src/img/chain.png', 16, 26);
-        this.game.load.image('box', 'src/img/box.png');
-        this.game.load.image('spring', 'src/img/spring.png');
-        this.game.load.image('spike', 'src/img/spike.png');
-        this.game.load.image('item', 'src/img/item.png');
+        this.game.load.spritesheet('bean', 'src/img/objects/bean.png', 163, 163);
+        this.game.load.spritesheet('chain', 'src/img/objects/chain.png', 16, 26);
+        this.game.load.image('box', 'src/img/objects/box.png');
+        this.game.load.image('spring', 'src/img/objects/spring.png');
+        this.game.load.image('spike', 'src/img/objects/spike.png');
+        this.game.load.image('item', 'src/img/objects/item.png');
+        this.game.load.image('platform', 'src/img/objects/platform.png');
+        this.game.load.image('ritual', 'src/img/objects/ritual.png');
+        this.game.load.image('teleporter', 'src/img/objects/teleporter.png');
+        this.game.load.image('stamp', 'src/img/objects/stamp.png');
 
-        this.game.load.image('platform', 'src/img/platform.png');
-        this.game.load.image('ritual', 'src/img/ritual.png');
-        this.game.load.image('teleporter', 'src/img/teleporter.png');
-        this.game.load.image('stamp', 'src/img/stamp.png');
+        // Menu-Screen
+        this.game.load.image('menuscreen', 'src/img/menuscreen.jpg');
 
         // Level 1
         this.game.load.tilemap('map-1', 'src/level/map-1.json', null, Phaser.Tilemap.TILED_JSON);
@@ -31,7 +33,10 @@ load.prototype = {
         this.game.load.image('background-2', 'src/img/level_2/background.jpg');
 
         // GameOver
-        this.game.load.spritesheet('gameover', 'src/img/gameover/background.jpg', 1408, 720);
+        this.game.load.spritesheet('gameover', 'src/img/gameover/background.jpg', 1280, 720);
+
+        // GameWon
+        this.game.load.spritesheet('gamewon', 'src/img/gamewon/background.jpg', 1280, 720);
     },
     create: function () {
         console.log('load.create');
