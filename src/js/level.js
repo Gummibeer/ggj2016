@@ -27,6 +27,8 @@ level.prototype = {
     hPlatformVelocities: [],
     vPlatforms: [],
     vPlatformVelocities: [],
+
+    solvedRituals: 0,
     init: function (config) {
         console.log('level.config: ' + config);
         this.config = config;
@@ -146,15 +148,15 @@ level.prototype = {
         stamp.body.fixedRotation = true;
         return stamp;
     },
-    createTeleporter: function(xAnchor, yAnchor, dest) {
+    createTeleporter: function (xAnchor, yAnchor, dest) {
         var teleporter = this.game.add.sprite(xAnchor, yAnchor, 'teleporter');
         this.game.physics.p2.enable(teleporter);
         teleporter.body.fixedRotation = true;
         teleporter.body.static = true;
         teleporter.playerDestination = dest;
     },
-    createRitual: function(xAnchor, yAnchor, task) {
-        var ritual = this.game.add.sprite(xAnchor,yAnchor, 'ritual');
+    createRitual: function (xAnchor, yAnchor, task) {
+        var ritual = this.game.add.sprite(xAnchor, yAnchor, 'ritual');
         this.game.physics.p2.enable(ritual);
         ritual.body.fixedRotation = true;
         ritual.body.static = true;
@@ -233,7 +235,7 @@ level.prototype = {
 
     },
     update: function () {
-        if(this.canMove) {
+        if (this.canMove) {
             this.movement();
             this.platformMovement();
             this.stampMovement();
@@ -294,7 +296,7 @@ level.prototype = {
             this.player.body.moveLeft(250);
 
             if (this.facing != 'left') {
-                if(this.player.attachedBody != null){
+                if (this.player.attachedBody != null) {
                     this.player.animations.play('left_w_item');
                 } else {
                     this.player.animations.play('left');
@@ -305,7 +307,7 @@ level.prototype = {
             this.player.body.moveRight(250);
 
             if (this.facing != 'right') {
-                if(this.player.attachedBody != null) {
+                if (this.player.attachedBody != null) {
                     this.player.animations.play('right_w_item');
                 } else {
                     this.player.animations.play('right');
@@ -315,7 +317,7 @@ level.prototype = {
         } else {
             if (this.facing != 'idle') {
                 this.player.animations.stop();
-                if(this.player.attachedBody != null){
+                if (this.player.attachedBody != null) {
                     this.player.frame = 7;
                 } else {
                     this.player.frame = 2;
@@ -325,7 +327,7 @@ level.prototype = {
         }
 
         if ((this.jumpButton.isDown || this.cursors.up.isDown) && this.checkIfCanJump() && this.game.time.now > this.jumpTimer) {
-            if(this.facing == 'idle') {
+            if (this.facing == 'idle') {
                 this.player.frame = 2;
             }
             this.player.body.moveUp(500);
@@ -363,9 +365,9 @@ level.prototype = {
                 body.fixedRotation = true;
                 this.player.attachedBody = body;
                 this.player.constraint = this.game.physics.p2.createLockConstraint(this.player, this.player.attachedBody, [0, 16], 0);
-            } else if (body.sprite.key == 'ritual'){
+            } else if (body.sprite.key == 'ritual') {
                 this.processRitual(body);
-            } else if (body.sprite.key == 'teleporter'){
+            } else if (body.sprite.key == 'teleporter') {
                 var dest = body.sprite.playerDestination;
                 this.player.body.x = dest.x;
                 this.player.body.y = dest.y;
@@ -374,28 +376,41 @@ level.prototype = {
             console.log('wall');
         }
     },
-    processRitual: function(spriteBody) {
+    processRitual: function (spriteBody) {
         var that = this;
         console.log('ritual started', spriteBody.sprite);
         this.game.physics.p2.isPaused = true;
         this.game.paused = true;
         this.pause();
         this.player.animations.stop();
-        if(this.currentRitual == null) {
+        if (this.currentRitual == null) {
             this.currentRitual = new BeanRitual();
-            this.currentRitual.start(this.game,this.player,spriteBody.sprite.bean.task, function(succeed){that.ritualFinished(succeed,spriteBody)});
+            this.currentRitual.start(this.game, this.player, spriteBody.sprite.bean.task, function (succeed) {
+                that.ritualFinished(succeed, spriteBody)
+            });
         }
     },
-    ritualFinished: function(succeed, spriteBody) {
+    ritualFinished: function (succeed, spriteBody) {
         this.currentRitual = null;
         this.levelTimer.timer.resume();
         this.canMove = true;
-        if(succeed) {
+        if (succeed) {
             console.log('finished ritual');
             this.destroyObject(spriteBody);
             this.game.physics.p2.isPaused = false;
             this.game.paused = false;
-
+            this.solvedRituals++;
+            this.player.frame = 2;
+            var anim = this.player.animations.add('won', [14, 15, 16, 17], 4, true);
+            anim.onComplete.add(function (sprite, animation) {
+                setTimeout(function () {
+                    this.game.state.start('GameWon');
+                }, 2000);
+            }, this);
+            anim.play();
+            if (this.solvedRituals == this.config.rituals.length) {
+                this.winPlayer();
+            }
         } else {
             this.game.physics.p2.isPaused = false;
             this.game.paused = false;
@@ -408,7 +423,7 @@ level.prototype = {
             if (equation[0] != undefined) {
                 if (equation[0].bodyA.parent != undefined && equation[0].bodyA.sprite != undefined && equation[0].bodyA.sprite.key != 'spike') {
                     this.destroyObject(equation[0].bodyA.parent);
-                } else if(equation[0].bodyB.parent != undefined && equation[0].bodyB.sprite != undefined && equation[0].bodyB.sprite.key != 'spike'){
+                } else if (equation[0].bodyB.parent != undefined && equation[0].bodyB.sprite != undefined && equation[0].bodyB.sprite.key != 'spike') {
                     this.destroyObject(equation[0].bodyB.parent);
                 }
             }
@@ -418,20 +433,25 @@ level.prototype = {
         this.pause();
         var anim = this.player.animations.add('death', [2, 10, 11, 12, 13], 5, true);
         anim.loop = false;
-        anim.onComplete.add(function(sprite, animation) {
-            setTimeout(function() {this.game.state.start('GameOver');}, 1000);
+        anim.onComplete.add(function (sprite, animation) {
+            setTimeout(function () {
+                this.game.state.start('GameOver');
+            }, 1000);
         }, this);
         anim.play();
+    },
+    winPlayer: function () {
+        this.game.state.start('GameWon');
     },
     destroyObject: function (object) {
         object.sprite.destroy();
         object.destroy();
     },
-    pause: function() {
+    pause: function () {
         this.levelTimer.timer.pause();
         this.canMove = false;
     },
-    resume: function() {
+    resume: function () {
         this.levelTimer.timer.resume();
         this.canMove = true;
     },
