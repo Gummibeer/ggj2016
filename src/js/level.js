@@ -60,8 +60,8 @@ level.prototype = {
     },
     createPlayer: function () {
         this.player = this.game.add.sprite(163, 163, 'bean');
-        this.player.scale.x = 0.25;
-        this.player.scale.y = 0.25;
+        this.player.scale.x = 0.35;
+        this.player.scale.y = 0.35;
         this.game.physics.p2.enable(this.player);
         this.player.body.collideWorldBounds = true;
         this.player.body.fixedRotation = true;
