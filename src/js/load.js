@@ -8,18 +8,17 @@ load.prototype = {
         loadingBar.anchor.setTo(0.5, 0.5);
         this.load.setPreloadSprite(loadingBar);
 
-        game.load.spritesheet('dude', 'src/img/dude.png', 32, 48);
-
-        game.load.tilemap('test-map', 'src/tilemap/1280x768.json', null, Phaser.Tilemap.TILED_JSON);
-        game.load.image('colliosion', 'src/tilemap/tile_collision.png');
+        this.game.load.spritesheet('dude', 'src/img/dude.png', 32, 48);
+        this.game.load.spritesheet('chain', 'src/img/chain.png', 16, 26);
 
         // Level 1
-        game.load.tilemap('map-1', 'src/tilemap/map-1.json', null, Phaser.Tilemap.TILED_JSON);
-        game.load.image('tiles-1', 'src/tilemap/tiles-1.png');
-        game.load.image('background-1', 'src/img/level_1/background.jpg');
+        this.game.load.tilemap('map-1', 'src/level/map-1.json', null, Phaser.Tilemap.TILED_JSON);
+        this.game.load.image('tiles-1', 'src/level/tiles-1.png');
+        this.game.load.json('objects-1', 'src/level/objects-1.json');
+        this.game.load.image('background-1', 'src/img/level_1/background.jpg');
 
         // Level 2
-        game.load.image('background-2', 'src/img/level_2/background.png');
+        this.game.load.image('background-2', 'src/img/level_2/background.png');
     },
     create: function () {
         console.log('load.create');
