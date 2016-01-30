@@ -20,7 +20,7 @@ level.prototype = {
     hPlatformVelocities: [],
     vPlatforms: [],
     vPlatformVelocities: [],
-    init: function(config) {
+    init: function (config) {
         console.log('level.config: ' + config);
         this.config = config;
     },
@@ -190,7 +190,7 @@ level.prototype = {
             this.player.attachedBody = null;
         }
     },
-    platformMovement: function() {
+    platformMovement: function () {
         var i;
         var data;
         for (i = 0; i < this.hPlatforms.length; i++) {
@@ -275,7 +275,7 @@ level.prototype = {
             if (body.sprite.key == 'spike') {
                 this.killPlayer();
             }
-            if ((body.sprite.key == 'item' || body.sprite.key == 'box' ) && this.takeButton.isDown) {
+            if ((body.sprite.key == 'item' || body.sprite.key == 'box') && this.takeButton.isDown) {
                 console.log('take item');
                 body.data.shapes[0].sensor = true;
                 body.fixedRotation = true;
@@ -288,7 +288,7 @@ level.prototype = {
     },
     objectHit: function (body, bodyB, shapeA, shapeB, equation) {
         if (body == null || (body.sprite && body.sprite.key == 'spike')) {
-            if(equation[0] != undefined) {
+            if (equation[0] != undefined) {
                 if (equation[0].bodyA.parent) {
                     this.destroyObject(equation[0].bodyA.parent);
                 } else {
