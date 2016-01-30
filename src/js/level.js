@@ -35,7 +35,7 @@ level.prototype = {
         this.game.physics.p2.setImpactEvents(true);
         this.game.physics.p2.gravity.y = 1000;
 
-        this.bg = this.game.add.tileSprite(0, 0, 1280, 720, this.config.background);
+        this.bg = this.game.add.tileSprite(0, 0, this.game.width, this.game.height, this.config.background);
         this.bg.fixedToCamera = true;
 
         this.createTilemap();
@@ -52,7 +52,7 @@ level.prototype = {
     createTilemap: function () {
         this.map = this.game.add.tilemap(this.config.map);
         this.map.addTilesetImage(this.config.tiles);
-        this.map.setCollisionByExclusion([13, 14, 15, 16, 46, 47, 48, 49, 50, 51]);
+        this.map.setCollisionByExclusion([]);
         this.layer = this.map.createLayer(this.config.layer);
         //this.layer.debug = true;
         this.layer.resizeWorld();
@@ -179,7 +179,18 @@ level.prototype = {
     },
     update: function () {
         this.movement();
+        this.platformMovement();
 
+        if (this.player.constraint != null && this.dropButton.isDown) {
+            console.log('drop item');
+            this.game.physics.p2.removeConstraint(this.player.constraint);
+            this.player.constraint = null;
+            this.player.attachedBody.fixedRotation = false;
+            this.player.attachedBody.data.shapes[0].sensor = false;
+            this.player.attachedBody = null;
+        }
+    },
+    platformMovement: function() {
         var i;
         var data;
         for (i = 0; i < this.hPlatforms.length; i++) {
@@ -201,12 +212,6 @@ level.prototype = {
             }
             this.vPlatforms[i].body.velocity.y = this.vPlatformVelocities[i];
             this.vPlatforms[i].body.x = data.x;
-        }
-
-        if (this.player.constraint != null && this.dropButton.isDown) {
-            console.log('drop item');
-            this.game.physics.p2.removeConstraint(this.player.constraint);
-            this.player.constraint = null;
         }
     },
     movement: function () {
@@ -270,9 +275,12 @@ level.prototype = {
             if (body.sprite.key == 'spike') {
                 this.killPlayer();
             }
-            if (body.sprite.key == 'item' && this.takeButton.isDown) {
+            if ((body.sprite.key == 'item' || body.sprite.key == 'box' ) && this.takeButton.isDown) {
                 console.log('take item');
-                this.player.constraint = this.game.physics.p2.createLockConstraint(this.player, body, [0, 0], 0);
+                body.data.shapes[0].sensor = true;
+                body.fixedRotation = true;
+                this.player.attachedBody = body;
+                this.player.constraint = this.game.physics.p2.createLockConstraint(this.player, this.player.attachedBody, [0, 16], 0);
             }
         } else {
             console.log('wall');
@@ -280,10 +288,12 @@ level.prototype = {
     },
     objectHit: function (body, bodyB, shapeA, shapeB, equation) {
         if (body == null || (body.sprite && body.sprite.key == 'spike')) {
-            if (equation[0].bodyA.parent) {
-                this.destroyObject(equation[0].bodyA.parent);
-            } else {
-                this.destroyObject(equation[0].bodyB.parent);
+            if(equation[0] != undefined) {
+                if (equation[0].bodyA.parent) {
+                    this.destroyObject(equation[0].bodyA.parent);
+                } else {
+                    this.destroyObject(equation[0].bodyB.parent);
+                }
             }
         }
     },

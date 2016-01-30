@@ -1,4 +1,4 @@
-var game = new Phaser.Game(1280, 720, Phaser.CANVAS, 'ggj-2016', {});
+var game = new Phaser.Game('100%', '100%', Phaser.CANVAS, 'stage', {});
 
 game.state.add('Boot', boot);
 game.state.add('Load', load);
