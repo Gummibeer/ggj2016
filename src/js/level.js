@@ -229,6 +229,7 @@ level.prototype = {
 
             lastRect = newRect;
         }
+
     },
     update: function () {
         if(this.canMove) {
@@ -383,16 +384,15 @@ level.prototype = {
         }
     },
     ritualFinished: function(succeed, spriteBody) {
+        this.currentRitual = null;
+        this.levelTimer.timer.resume();
+        this.canMove = true;
         if(succeed) {
-            console.log('finished ritual')
-            this.currentRitual = null;
-            spriteBody.sprite.destroy();
-            spriteBody.destroy();
-            this.resume();
+            console.log('finished ritual');
+            this.destroyObject(spriteBody);
         } else {
             console.log('failed on finishing ritual');
-            this.levelTimer.timer.resume();
-            this.canMove = true;
+
         }
     },
     objectHit: function (body, bodyB, shapeA, shapeB, equation) {
