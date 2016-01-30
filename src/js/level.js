@@ -60,20 +60,20 @@ level.prototype = {
     },
     createPlayer: function () {
         this.player = this.game.add.sprite(163, 163, 'bean');
-        //this.player.scale.x = 0.25;
-        //this.player.scale.y = 0.25;
+        this.player.scale.x = 0.25;
+        this.player.scale.y = 0.25;
         this.game.physics.p2.enable(this.player);
         this.player.body.collideWorldBounds = true;
         this.player.body.fixedRotation = true;
         this.player.body.x = this.config.player.x;
         this.player.body.y = this.config.player.y;
-        this.player.animations.add('left', [3, 2], 10, true);
-        this.player.animations.add('turn', [4], 20, true);
-        this.player.animations.add('right', [0, 1], 10, true);
+        this.player.animations.add('left', [4, 3], 20, true);
+        this.player.animations.add('turn', [2], 40, true);
+        this.player.animations.add('right', [0, 1], 20, true);
 
-        this.player.animations.add('left_w_item', [3, 2], 10, true);
-        this.player.animations.add('turn_w_item', [4], 20, true);
-        this.player.animations.add('right_w_item', [0, 1], 10, true);
+        this.player.animations.add('left_w_item', [6, 5], 20, true);
+        this.player.animations.add('turn_w_item', [7], 20, true);
+        this.player.animations.add('right_w_item', [8, 9], 20, true);
 
         this.game.camera.follow(this.player);
         this.player.body.onBeginContact.add(this.playerHit, this);
@@ -248,21 +248,11 @@ level.prototype = {
         } else {
             if (this.facing != 'idle') {
                 this.player.animations.stop();
-
-                if (this.facing == 'left') {
-                    if(this.player.attachedBody != null){
-                        this.player.frame = 0;
-                    } else {
-                        this.player.frame = 0;
-                    }
+                if(this.player.attachedBody != null){
+                    this.player.frame = 7;
                 } else {
-                    if(this.player.attachedBody != null){
-                        this.player.frame = 5;
-                    } else {
-                        this.player.frame = 5;
-                    }
+                    this.player.frame = 2;
                 }
-
                 this.facing = 'idle';
             }
         }
