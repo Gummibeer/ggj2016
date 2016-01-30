@@ -18,6 +18,9 @@ level.prototype = {
     currentRitual: null,
 
     config: null,
+    stampVelocity: 100,
+    stamps: [],
+    stampVelocities: [],
     platformVelocity: 150,
     hPlatforms: [],
     hPlatformVelocities: [],
@@ -124,6 +127,20 @@ level.prototype = {
             data = this.config.teleporters[i];
             this.createTeleporter(data.x, data.y, data.dest);
         }
+        for (i = 0; i < this.config.stamps.length; i++) {
+            data = this.config.stamps[i];
+            this.stamps[i] = this.createStamp(data.x, data.y1);
+            this.stampVelocities[i] = this.stampVelocity;
+        }
+    },
+    createStamp: function (xAnchor, yAnchor) {
+        var stamp = this.game.add.sprite(xAnchor, yAnchor, 'stamp');
+        this.game.physics.p2.enable(stamp);
+        stamp.body.mass = 9999;
+        stamp.body.data.gravityScale = 0;
+        stamp.body.data.motionState = 1;
+        stamp.body.fixedRotation = true;
+        return stamp;
     },
     createTeleporter: function(xAnchor, yAnchor, dest) {
         var teleporter = this.game.add.sprite(xAnchor, yAnchor, 'teleporter');
@@ -141,9 +158,8 @@ level.prototype = {
         ritual.bean.task = task;
         return ritual;
     },
-
     createPlatform: function (xAnchor, yAnchor) {
-        var platform = this.game.add.sprite(xAnchor, yAnchor, 'brick');
+        var platform = this.game.add.sprite(xAnchor, yAnchor, 'platform');
         this.game.physics.p2.enable(platform);
         platform.body.mass = 9999;
         platform.body.data.gravityScale = 0;
@@ -215,6 +231,7 @@ level.prototype = {
         if(this.canMove) {
             this.movement();
             this.platformMovement();
+            this.stampMovement();
         }
 
         if (this.player.constraint != null && this.dropButton.isDown) {
@@ -224,6 +241,21 @@ level.prototype = {
             this.player.attachedBody.fixedRotation = false;
             this.player.attachedBody.data.shapes[0].sensor = false;
             this.player.attachedBody = null;
+            this.player.frame = 2;
+        }
+    },
+    stampMovement: function () {
+        var i;
+        var data;
+        for (i = 0; i < this.stamps.length; i++) {
+            data = this.config.stamps[i];
+            if (this.stamps[i].body.y < data.y1) {
+                this.stampVelocities[i] *= -1;
+            } else if (this.stamps[i].body.y > data.y2) {
+                this.stampVelocities[i] *= -1;
+            }
+            this.stamps[i].body.velocity.y = this.stampVelocities[i];
+            this.stamps[i].body.x = data.x;
         }
     },
     platformMovement: function () {
@@ -288,6 +320,9 @@ level.prototype = {
         }
 
         if ((this.jumpButton.isDown || this.cursors.up.isDown) && this.checkIfCanJump() && this.game.time.now > this.jumpTimer) {
+            if(this.facing == 'idle') {
+                this.player.frame = 2;
+            }
             this.player.body.moveUp(500);
             this.jumpTimer = this.game.time.now + 750;
         }
@@ -314,7 +349,7 @@ level.prototype = {
             this.killPlayer();
         } else if (body.sprite) {
             console.log(body.sprite.key);
-            if (body.sprite.key == 'spike') {
+            if (body.sprite.key == 'spike' || body.sprite.key == 'stamp') {
                 this.killPlayer();
             }
             if (this.player.attachedBody == null && this.takeButton.isDown && (body.sprite.key == 'item' || body.sprite.key == 'box')) {
