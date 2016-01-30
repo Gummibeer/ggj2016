@@ -289,9 +289,9 @@ level.prototype = {
     objectHit: function (body, bodyB, shapeA, shapeB, equation) {
         if (body == null || (body.sprite && body.sprite.key == 'spike')) {
             if (equation[0] != undefined) {
-                if (equation[0].bodyA.parent) {
+                if (equation[0].bodyA.parent && equation[0].bodyA.sprite.key != 'spike') {
                     this.destroyObject(equation[0].bodyA.parent);
-                } else {
+                } else if(equation[0].bodyB.parent && equation[0].bodyB.sprite.key != 'spike'){
                     this.destroyObject(equation[0].bodyB.parent);
                 }
             }
