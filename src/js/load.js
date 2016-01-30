@@ -16,7 +16,7 @@ load.prototype = {
         this.game.load.image('item', 'src/img/item.png');
 
         this.game.load.image('brick', 'src/img/brick.png');
-        this.game.load.image('weight', 'src/img/weight.png');
+        this.game.load.image('ritual', 'src/img/ritual.png');
 
         // Level 1
         this.game.load.tilemap('map-1', 'src/level/map-1.json', null, Phaser.Tilemap.TILED_JSON);
