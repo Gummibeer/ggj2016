@@ -231,18 +231,10 @@ level.prototype = {
                 this.player.animations.play('right');
                 this.facing = 'right';
             }
-        } else {
-            if (this.facing != 'idle') {
-                this.player.animations.stop();
-
-                if (this.facing == 'left') {
-                    this.player.frame = 0;
-                } else {
-                    this.player.frame = 5;
-                }
-
-                this.facing = 'idle';
-            }
+        } else if (this.facing != 'idle') {
+            this.player.animations.stop();
+            this.player.frame = 4;
+            this.facing = 'idle';
         }
 
         if ((this.jumpButton.isDown || this.cursors.up.isDown) && this.checkIfCanJump() && this.game.time.now > this.jumpTimer) {
@@ -275,7 +267,7 @@ level.prototype = {
             if (body.sprite.key == 'spike') {
                 this.killPlayer();
             }
-            if ((body.sprite.key == 'item' || body.sprite.key == 'box') && this.takeButton.isDown) {
+            if (this.player.attachedBody == null && this.takeButton.isDown && (body.sprite.key == 'item' || body.sprite.key == 'box')) {
                 console.log('take item');
                 body.data.shapes[0].sensor = true;
                 body.fixedRotation = true;
@@ -289,9 +281,9 @@ level.prototype = {
     objectHit: function (body, bodyB, shapeA, shapeB, equation) {
         if (body == null || (body.sprite && body.sprite.key == 'spike')) {
             if (equation[0] != undefined) {
-                if (equation[0].bodyA.parent && equation[0].bodyA.sprite.key != 'spike') {
+                if (equation[0].bodyA.parent != undefined && equation[0].bodyA.sprite != undefined && equation[0].bodyA.sprite.key != 'spike') {
                     this.destroyObject(equation[0].bodyA.parent);
-                } else if(equation[0].bodyB.parent && equation[0].bodyB.sprite.key != 'spike'){
+                } else if(equation[0].bodyB.parent != undefined && equation[0].bodyB.sprite != undefined && equation[0].bodyB.sprite.key != 'spike'){
                     this.destroyObject(equation[0].bodyB.parent);
                 }
             }
