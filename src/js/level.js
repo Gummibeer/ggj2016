@@ -46,8 +46,6 @@ level.prototype = {
         this.bg.fixedToCamera = true;
 
         this.createTilemap();
-        this.createPlayer();
-        this.createObjects();
 
         this.levelTimer = this.game.time.events.add(Phaser.Timer.SECOND * this.config.leveltime, this.killPlayer, this);
 
@@ -62,6 +60,8 @@ level.prototype = {
         this.map.addTilesetImage(this.config.tilesForeground);
         this.map.setCollisionByExclusion([]);
         this.layer = this.map.createLayer(this.config.layerCollision);
+        this.createPlayer();
+        this.createObjects();
         this.foreground = this.map.createLayer(this.config.layerForeground);
         //this.layer.debug = true;
         this.layer.resizeWorld();
@@ -88,6 +88,7 @@ level.prototype = {
         this.player.body.onBeginContact.add(this.playerHit, this);
         this.playerMaterial = this.game.physics.p2.createMaterial();
         this.player.body.setMaterial(this.playerMaterial);
+        return this.player;
     },
     createObjects: function () {
         var i;
@@ -376,11 +377,13 @@ level.prototype = {
     processRitual: function(spriteBody) {
         var that = this;
         console.log('ritual started', spriteBody.sprite);
+        this.game.physics.p2.isPaused = true;
+        this.game.paused = true;
         this.pause();
         this.player.animations.stop();
         if(this.currentRitual == null) {
             this.currentRitual = new BeanRitual();
-            this.currentRitual.start(this.game,spriteBody.sprite.bean.task, function(succeed){that.ritualFinished(succeed,spriteBody)});
+            this.currentRitual.start(this.game,this.player,spriteBody.sprite.bean.task, function(succeed){that.ritualFinished(succeed,spriteBody)});
         }
     },
     ritualFinished: function(succeed, spriteBody) {
@@ -390,7 +393,12 @@ level.prototype = {
         if(succeed) {
             console.log('finished ritual');
             this.destroyObject(spriteBody);
+            this.game.physics.p2.isPaused = false;
+            this.game.paused = false;
+
         } else {
+            this.game.physics.p2.isPaused = false;
+            this.game.paused = false;
             console.log('failed on finishing ritual');
 
         }

@@ -4,7 +4,11 @@ var BeanRitual = function () {
     var _callback = null;
     var _keycount = 0;
     var _timeout = null;
+    var _game = null;
+    var _overlay = null;
+    var _player = null;
     var _processKey = function (key) {
+        console.log(key);
         var nesKey = _keys[_keycount];
         console.log('THE KEY', key.keyCode, _keys, _keycount, _keys[_keycount], nesKey, Phaser.Keyboard[nesKey]);
         if (key.keyCode == Phaser.Keyboard[nesKey]) {
@@ -20,6 +24,7 @@ var BeanRitual = function () {
     var _destroy = function () {
         game.input.keyboard.onPressCallback = null;
         clearTimeout(_timeout);
+        _overlay.destroy();
     };
 
     var _onFail = function () {
@@ -32,19 +37,22 @@ var BeanRitual = function () {
         _callback(true);
     };
 
-    this.start = function (game, task, callback) {
+    this.start = function (game, player, task, callback) {
         console.log(game, task, callback);
-        this.zoomIn();
         _time = task.time;
         _keys = task.keys;
         _callback = callback;
+        _game = game;
+        _player = player;
+        _showTasks();
         _timeout = setTimeout(_onFail, Phaser.Timer.SECOND * _time);
         game.input.keyboard.onPressCallback = _processKey;
     };
 
-    this.zoomIn = function() {
-        var scale = game.stage.scale.x + .8;
-        game.add.tween(game.stage.scale).to({x: scale, y: scale}, 400).start();
+    var _showTasks = function () {
+        var style = { font: "25px Arial", fill: "#ff0044", align: "center", backgroundColor:"rgba(255, 255, 255, 0.5)" };
+        _overlay = _game.add.text(_game.width/4, _game.width/4,"Perform the following ritual to destroy this part:\n"+_keys+"\n", style);
+        _overlay.fixedToCamera = true;
     }
 
 };

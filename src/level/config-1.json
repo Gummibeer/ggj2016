@@ -74,7 +74,7 @@
       },
       "task": {
         "time": 5,
-        "keys": ["B","A","F","G","SPACEBAR","SPACEBAR"]
+        "keys": ["b","a","f","g"]
       }
     }
   ],
