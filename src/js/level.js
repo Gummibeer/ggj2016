@@ -2,8 +2,8 @@ var level = function (game) {
 };
 
 WebFontConfig = {
-    active: function() {
-        window.fontReady=true;
+    active: function () {
+        window.fontReady = true;
     },
     //  The Google Fonts we want to load (specify as many as you like in the array)
     google: {
@@ -90,7 +90,7 @@ level.prototype = {
         this.player.scale.y = 0.35;
         this.game.physics.p2.enable(this.player);
         this.player.body.setCircle(25);
-        this.player.anchor.setTo(0.5,0.6);
+        this.player.anchor.setTo(0.5, 0.6);
         this.player.body.collideWorldBounds = true;
         this.player.body.fixedRotation = true;
         this.player.body.x = this.config.player.x;
@@ -277,9 +277,10 @@ level.prototype = {
             this.player.frame = 2;
         }
     },
-    ritualRotate: function() {
+    ritualRotate: function () {
         for (var i = 0; i < this.rituals.length; i++) {
-            this.rituals[i].angle += 1;;
+            this.rituals[i].angle += 1;
+            ;
         }
     },
     stampMovement: function () {
