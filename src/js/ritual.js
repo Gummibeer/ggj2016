@@ -10,8 +10,8 @@ var BeanRitual = function () {
     var _processKey = function (key) {
         console.log(key);
         var nesKey = _keys[_keycount];
-        console.log('THE KEY', key.keyCode, _keys, _keycount, _keys[_keycount], nesKey, Phaser.Keyboard[nesKey]);
-        if (key.keyCode == Phaser.Keyboard[nesKey]) {
+        console.log('THE KEY', key, _keys, _keycount, nesKey);
+        if (key == nesKey) {
             _keycount++;
             if (_keycount == _keys.length) {
                 _onComplete();
