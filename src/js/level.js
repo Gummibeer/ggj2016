@@ -356,6 +356,8 @@ level.prototype = {
             this.canMove = true;
         } else {
             console.log('failed on finishing ritual');
+            this.levelTimer.timer.resume();
+            this.canMove = true;
         }
     },
 
