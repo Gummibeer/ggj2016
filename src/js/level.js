@@ -120,6 +120,17 @@ level.prototype = {
             data = this.config.rituals[i];
             this.createRitual(data.position.x, data.position.y, data.task);
         }
+        for (i = 0; i < this.config.teleporters.length; i++) {
+            data = this.config.teleporters[i];
+            this.createTeleporter(data.x, data.y, data.dest);
+        }
+    },
+    createTeleporter: function(xAnchor, yAnchor, dest) {
+        var teleporter = this.game.add.sprite(xAnchor, yAnchor, 'teleporter');
+        this.game.physics.p2.enable(teleporter);
+        teleporter.body.fixedRotation = true;
+        teleporter.body.static = true;
+        teleporter.playerDestination = dest;
     },
     createRitual: function(xAnchor, yAnchor, task) {
         var ritual = this.game.add.sprite(xAnchor,yAnchor, 'ritual');
@@ -313,7 +324,11 @@ level.prototype = {
                 this.player.attachedBody = body;
                 this.player.constraint = this.game.physics.p2.createLockConstraint(this.player, this.player.attachedBody, [0, 16], 0);
             } else if (body.sprite.key == 'ritual'){
-                this.processRitual(body);
+                this.processRitual(body.sprite);
+            } else if (body.sprite.key == 'teleporter'){
+                var dest = body.sprite.playerDestination;
+                this.player.body.x = dest.x;
+                this.player.body.y = dest.y;
             }
         } else {
             console.log('wall');
@@ -323,6 +338,7 @@ level.prototype = {
         console.log('ritual started', spriteBody.sprite);
         this.levelTimer.timer.pause();
         this.canMove = false;
+        this.player.animations.stop();
         if(this.currentRitual == null) {
             this.currentRitual = new BeanRitual();
             this.currentRitual.start(this.game,spriteBody.sprite.bean.task, function(succeed){this.ritualFinished(succeed,spriteBody)});

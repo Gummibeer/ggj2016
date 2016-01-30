@@ -75,5 +75,15 @@
         "keys": ["1","A","F","G","SPACEBAR","SPACEBAR"]
       }
     }
+  ],
+  "teleporters": [
+    {
+      "x": 350,
+      "y": 416,
+      "dest": {
+        "x": 500,
+        "y": 750
+      }
+    }
   ]
 }
