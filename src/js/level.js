@@ -376,15 +376,13 @@ level.prototype = {
     processRitual: function(spriteBody) {
         var that = this;
         console.log('ritual started', spriteBody.sprite);
-        this.levelTimer.timer.pause();
-        this.canMove = false;
+        this.pause();
         this.player.animations.stop();
         if(this.currentRitual == null) {
             this.currentRitual = new BeanRitual();
             this.currentRitual.start(this.game,spriteBody.sprite.bean.task, function(succeed){that.ritualFinished(succeed,spriteBody)});
         }
     },
-
     ritualFinished: function(succeed, spriteBody) {
         this.currentRitual = null;
         this.levelTimer.timer.resume();
@@ -397,7 +395,6 @@ level.prototype = {
 
         }
     },
-
     objectHit: function (body, bodyB, shapeA, shapeB, equation) {
         if (body == null || (body.sprite && body.sprite.key == 'spike')) {
             if (equation[0] != undefined) {
@@ -410,11 +407,25 @@ level.prototype = {
         }
     },
     killPlayer: function () {
-        this.game.state.start('GameOver');
+        this.pause();
+        var anim = this.player.animations.add('death', [2, 10, 11, 12, 13], 5, true);
+        anim.loop = false;
+        anim.onComplete.add(function(sprite, animation) {
+            setTimeout(function() {this.game.state.start('GameOver');}, 1000);
+        }, this);
+        anim.play();
     },
     destroyObject: function (object) {
         object.sprite.destroy();
         object.destroy();
+    },
+    pause: function() {
+        this.levelTimer.timer.pause();
+        this.canMove = false;
+    },
+    resume: function() {
+        this.levelTimer.timer.resume();
+        this.canMove = true;
     },
     render: function () {
         this.game.debug.text("Time until gameover: " + Math.round(this.game.time.events.duration / 1000), 32, 32);
