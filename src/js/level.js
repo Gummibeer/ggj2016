@@ -297,7 +297,7 @@ level.prototype = {
             if (body.sprite.key == 'spike') {
                 this.killPlayer();
             }
-            if ((body.sprite.key == 'item' || body.sprite.key == 'box') && this.takeButton.isDown) {
+            if (this.player.attachedBody == null && this.takeButton.isDown && (body.sprite.key == 'item' || body.sprite.key == 'box')) {
                 console.log('take item');
                 body.data.shapes[0].sensor = true;
                 body.fixedRotation = true;
@@ -311,9 +311,9 @@ level.prototype = {
     objectHit: function (body, bodyB, shapeA, shapeB, equation) {
         if (body == null || (body.sprite && body.sprite.key == 'spike')) {
             if (equation[0] != undefined) {
-                if (equation[0].bodyA.parent && equation[0].bodyA.sprite.key != 'spike') {
+                if (equation[0].bodyA.parent != undefined && equation[0].bodyA.sprite != undefined && equation[0].bodyA.sprite.key != 'spike') {
                     this.destroyObject(equation[0].bodyA.parent);
-                } else if(equation[0].bodyB.parent && equation[0].bodyB.sprite.key != 'spike'){
+                } else if(equation[0].bodyB.parent != undefined && equation[0].bodyB.sprite != undefined && equation[0].bodyB.sprite.key != 'spike'){
                     this.destroyObject(equation[0].bodyB.parent);
                 }
             }
