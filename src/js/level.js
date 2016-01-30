@@ -313,24 +313,30 @@ level.prototype = {
                 this.player.attachedBody = body;
                 this.player.constraint = this.game.physics.p2.createLockConstraint(this.player, this.player.attachedBody, [0, 16], 0);
             } else if (body.sprite.key == 'ritual'){
-                this.processRitual(body.sprite);
+                this.processRitual(body);
             }
         } else {
             console.log('wall');
         }
     },
-    processRitual: function(sprite) {
-        console.log('ritual started', sprite);
+    processRitual: function(spriteBody) {
+        console.log('ritual started', spriteBody.sprite);
         this.levelTimer.timer.pause();
         this.canMove = false;
         if(this.currentRitual == null) {
             this.currentRitual = new BeanRitual();
-            this.currentRitual.start(this.game,sprite.bean.task, this.ritualFinished);
+            this.currentRitual.start(this.game,spriteBody.sprite.bean.task, function(succeed){this.ritualFinished(succeed,spriteBody)});
         }
     },
 
-    ritualFinished: function() {
-
+    ritualFinished: function(succeed, spriteBody) {
+        if(succeed) {
+            this.currentRitual = null;
+            spriteBody.sprite.destroy();
+            spriteBody.destroy();
+        } else {
+            console.log('failed on fonishing ritual');
+        }
     },
 
     objectHit: function (body, bodyB, shapeA, shapeB, equation) {
