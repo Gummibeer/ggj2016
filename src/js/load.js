@@ -25,7 +25,7 @@ load.prototype = {
         this.game.load.image('background-1', 'src/img/level_1/background.jpg');
 
         // Level 2
-        this.game.load.image('background-2', 'src/img/level_2/background.png');
+        this.game.load.image('background-2', 'src/img/level_2/background.jpg');
     },
     create: function () {
         console.log('load.create');
