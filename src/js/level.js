@@ -1,6 +1,17 @@
 var level = function (game) {
 };
 
+WebFontConfig = {
+    active: function() {
+        window.fontReady=true;
+    },
+    //  The Google Fonts we want to load (specify as many as you like in the array)
+    google: {
+        families: ['Lato:400,900:latin']
+    }
+
+};
+
 level.prototype = {
     bg: null,
     map: null,
@@ -17,6 +28,7 @@ level.prototype = {
     levelTimer: null,
     canMove: true,
     currentRitual: null,
+    fontReady: false,
 
     config: null,
     stampVelocity: 100,
@@ -35,6 +47,7 @@ level.prototype = {
     },
     preload: function () {
         console.log('level.preload: ' + this.config);
+        this.game.load.script('webfont', '//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js');
     },
     create: function () {
         console.log('level.create: ' + this.config);
@@ -241,6 +254,10 @@ level.prototype = {
             this.stampMovement();
         }
 
+        if (this.solvedRituals == this.config.rituals.length) {
+            this.winPlayer();
+        }
+
         if (this.player.constraint != null && this.dropButton.isDown) {
             console.log('drop item');
             this.game.physics.p2.removeConstraint(this.player.constraint);
@@ -386,11 +403,12 @@ level.prototype = {
         if (this.currentRitual == null) {
             this.currentRitual = new BeanRitual();
             this.currentRitual.start(this.game, this.player, spriteBody.sprite.bean.task, function (succeed) {
-                that.ritualFinished(succeed, spriteBody)
+                that.ritualFinished(succeed, spriteBody);
             });
         }
     },
     ritualFinished: function (succeed, spriteBody) {
+        console.log(succeed);
         this.currentRitual = null;
         this.levelTimer.timer.resume();
         this.canMove = true;
@@ -401,13 +419,6 @@ level.prototype = {
             this.game.paused = false;
             this.solvedRituals++;
             this.player.frame = 2;
-            var anim = this.player.animations.add('won', [14, 15, 16, 17], 4, true);
-            anim.onComplete.add(function (sprite, animation) {
-                setTimeout(function () {
-                    this.game.state.start('GameWon');
-                }, 2000);
-            }, this);
-            anim.play();
             if (this.solvedRituals == this.config.rituals.length) {
                 this.winPlayer();
             }
