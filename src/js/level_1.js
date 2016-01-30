@@ -1,13 +1,4 @@
 var level_1 = function (game) {
-    var map;
-    var tileset;
-    var layer;
-    var player;
-    var facing = 'left';
-    var jumpTimer = 0;
-    var cursors;
-    var jumpButton;
-    var bg;
 };
 
 level_1.prototype = {
@@ -25,6 +16,7 @@ level_1.prototype = {
     create: function () {
         this.game.physics.startSystem(Phaser.Physics.P2JS);
         this.game.physics.p2.gravity.y = 1000;
+        this.game.physics.p2.friction = 5;
 
         this.bg = this.game.add.tileSprite(0, 0, 1280, 720, 'background-1');
         this.bg.fixedToCamera = true;
@@ -33,7 +25,7 @@ level_1.prototype = {
         this.map.addTilesetImage('colliosion');
         this.map.setCollisionByExclusion([13, 14, 15, 16, 46, 47, 48, 49, 50, 51]);
 
-        this.layer = this.map.createLayer('collllissssion');
+        this.layer = this.map.createLayer('collision-level-1');
         this.layer.debug = true;
         this.layer.resizeWorld();
 
@@ -43,6 +35,8 @@ level_1.prototype = {
         this.game.physics.p2.enable(this.player);
         this.player.body.collideWorldBounds = true;
         this.player.body.fixedRotation = true;
+        this.player.body.x = 64;
+        this.player.body.y = 416;
         this.player.animations.add('left', [0, 1, 2, 3], 10, true);
         this.player.animations.add('turn', [4], 20, true);
         this.player.animations.add('right', [5, 6, 7, 8], 10, true);
@@ -95,17 +89,14 @@ level_1.prototype = {
         this.game.debug.body(this.player);
         this.game.debug.bodyInfo(this.player, 16, 24);
     },
-    checkIfCanJump: function() {
-
+    checkIfCanJump: function () {
         var yAxis = p2.vec2.fromValues(0, 1);
         var result = false;
 
-        for (var i = 0; i < this.game.physics.p2.world.narrowphase.contactEquations.length; i++)
-        {
+        for (var i = 0; i < this.game.physics.p2.world.narrowphase.contactEquations.length; i++) {
             var c = this.game.physics.p2.world.narrowphase.contactEquations[i];
 
-            if (c.bodyA === this.player.body.data || c.bodyB === this.player.body.data)
-            {
+            if (c.bodyA === this.player.body.data || c.bodyB === this.player.body.data) {
                 var d = p2.vec2.dot(c.normalA, yAxis); // Normal dot Y-axis
                 if (c.bodyA === this.player.body.data) d *= -1;
                 if (d > 0.5) result = true;
@@ -113,6 +104,5 @@ level_1.prototype = {
         }
 
         return result;
-
     }
 };
