@@ -2,11 +2,14 @@ var gamewon = function (game) {
 };
 
 gamewon.prototype = {
+    bg: null,
     preload: function () {
         console.log('gamewon.preload');
     },
     create: function () {
         console.log('gamewon.create');
-        this.game.stage.backgroundColor = '#008800';
+        this.bg = this.game.add.sprite('center', 'center', 'gamewon');
+        var anim = this.bg.animations.add('play', [0, 1, 2, 3], 3, true);
+        anim.play();
     }
 };

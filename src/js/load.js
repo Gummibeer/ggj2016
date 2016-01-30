@@ -31,7 +31,10 @@ load.prototype = {
         this.game.load.image('background-2', 'src/img/level_2/background.jpg');
 
         // GameOver
-        this.game.load.spritesheet('gameover', 'src/img/gameover/background.jpg', 1408, 720);
+        this.game.load.spritesheet('gameover', 'src/img/gameover/background.jpg', 1280, 720);
+
+        // GameWon
+        this.game.load.spritesheet('gamewon', 'src/img/gamewon/background.jpg', 1280, 720);
     },
     create: function () {
         console.log('load.create');
