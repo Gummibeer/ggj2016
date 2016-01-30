@@ -48,7 +48,6 @@ level.prototype = {
     },
     preload: function () {
         console.log('level.preload: ' + this.config);
-        this.game.load.script('webfont', '//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js');
     },
     create: function () {
         console.log('level.create: ' + this.config);
