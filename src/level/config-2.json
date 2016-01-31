@@ -6,6 +6,8 @@
   "tilesForeground": "foreground-2",
   "layerCollision": "collision-level-2",
   "layerForeground": "foreground-level-2",
+  "nextLevel": null,
+
   "player": {
     "x": 96,
     "y": 64
@@ -163,8 +165,8 @@
       "x": 192,
       "y": 544,
       "dest": {
-        "x": 2000,
-        "y": 960
+        "x": 2200,
+        "y": 950
       }
     },
     {

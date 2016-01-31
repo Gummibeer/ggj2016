@@ -6,6 +6,7 @@
   "tilesForeground": "foreground-1",
   "layerCollision": "collision-level-1",
   "layerForeground": "foreground-level-1",
+  "nextLevel": "config-2",
 
   "player": {
     "x": 96,

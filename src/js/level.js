@@ -49,14 +49,40 @@ level.prototype = {
 
     solvedRituals: 0,
     init: function (config) {
-        console.log('level.config: ' + config);
+        this.bg = null;
+        this.music = null;
+        this.map = null;
+        this.layer = null;
+        this.foreground = null;
+        this.player = null;
+        this.cursors = null;
+        this.jumpButton = null;
+        this.takeButton = null;
+        this.dropButton = null;
+        this.escButton = null;
+        this.buttonMask = null;
+        this.timeTween = null;
+        this.jumpTimer = 0;
+        this.facing = 'right';
+        this.playerMaterial = null;
+        this.levelTimer = null;
+        this.canMove = true;
+        this.currentRitual = null;
+        this.fontReady = false;
+        this.hud = null;
         this.config = config;
-    },
-    preload: function () {
-        console.log('level.preload: ' + this.config);
+        this.rituals = [];
+        this.stampVelocity = 100;
+        this.stamps = [];
+        this.stampVelocities = [];
+        this.platformVelocity = 150;
+        this.hPlatforms = [];
+        this.hPlatformVelocities = [];
+        this.vPlatforms = [];
+        this.vPlatformVelocities = [];
+        this.solvedRituals = 0;
     },
     create: function () {
-        console.log('level.create: ' + this.config);
         this.config = this.game.cache.getJSON(this.config);
 
         this.game.physics.startSystem(Phaser.Physics.P2JS);
@@ -74,13 +100,17 @@ level.prototype = {
         this.createTilemap();
         this.createHud();
 
-        this.levelTimer = this.game.time.events.add(Phaser.Timer.SECOND * this.config.leveltime, function(){this.killPlayer(true)}, this);
+        this.levelTimer = this.game.time.events.add(Phaser.Timer.SECOND * this.config.leveltime, function () {
+            this.killPlayer(true)
+        }, this);
 
         this.cursors = this.game.input.keyboard.createCursorKeys();
         this.jumpButton = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
         this.takeButton = this.game.input.keyboard.addKey(Phaser.Keyboard.T);
         this.dropButton = this.game.input.keyboard.addKey(Phaser.Keyboard.D);
         this.escButton = this.game.input.keyboard.addKey(Phaser.Keyboard.ESC);
+
+        this.canMove = true;
     },
     createTilemap: function () {
         this.map = this.game.add.tilemap(this.config.map);
@@ -181,13 +211,13 @@ level.prototype = {
         timeText.fill = '#ffffff';
         timeText.setShadow(8, 8, 'rgba(0,0,0,0.8)', 8);
         this.hud.addChild(timeText);
-        this.timeTween = setInterval(function(timeText){
+        this.timeTween = setInterval(function (timeText) {
             timeText.text = Math.round(game.time.events.duration / 1000);
-        },  that.config.leveltime*1000/1000, timeText);
+        }, that.config.leveltime * 1000 / 1000, timeText);
         this.hud.fixedToCamera = true;
 
-       // var clockSprite = this.game.make.sprite(10, 15, 'menuclock');
-       // this.hud.addChild(clockSprite);
+        // var clockSprite = this.game.make.sprite(10, 15, 'menuclock');
+        // this.hud.addChild(clockSprite);
     },
     createStamp: function (xAnchor, yAnchor) {
         var stamp = this.game.add.sprite(xAnchor, yAnchor, 'stamp');
@@ -304,7 +334,6 @@ level.prototype = {
         }
 
         if (this.takeButton.isDown && this.player.constraint == null && this.player.possibleTakeableItem != null) {
-            console.log('take item');
             this.player.possibleTakeableItem.data.shapes[0].sensor = true;
             this.player.possibleTakeableItem.fixedRotation = true;
             this.player.attachedBody = this.player.possibleTakeableItem;
@@ -313,7 +342,6 @@ level.prototype = {
         }
 
         if (this.player.constraint != null && this.dropButton.isDown) {
-            console.log('drop item');
             this.game.physics.p2.removeConstraint(this.player.constraint);
             this.player.constraint = null;
             this.player.attachedBody.fixedRotation = false;
@@ -328,17 +356,18 @@ level.prototype = {
         }
     },
     stampMovement: function () {
-        var i;
         var data;
-        for (i = 0; i < this.stamps.length; i++) {
+        for (var i = 0; i < this.stamps.length; i++) {
             data = this.config.stamps[i];
-            if (this.stamps[i].body.y < data.y1) {
-                this.stampVelocities[i] *= -1;
-            } else if (this.stamps[i].body.y > data.y2) {
-                this.stampVelocities[i] *= -1;
+            if (this.stamps[i].body) {
+                if (this.stamps[i].body.y < data.y1) {
+                    this.stampVelocities[i] *= -1;
+                } else if (this.stamps[i].body.y > data.y2) {
+                    this.stampVelocities[i] *= -1;
+                }
+                this.stamps[i].body.velocity.y = this.stampVelocities[i];
+                this.stamps[i].body.x = data.x;
             }
-            this.stamps[i].body.velocity.y = this.stampVelocities[i];
-            this.stamps[i].body.x = data.x;
         }
     },
     platformMovement: function () {
@@ -428,10 +457,8 @@ level.prototype = {
     },
     playerHit: function (body, bodyB, shapeA, shapeB, equation) {
         if (body == null) {
-            console.log('world');
             this.killPlayer();
         } else if (body.sprite) {
-            console.log(body.sprite.key);
             if (body.sprite.key == 'spike' || body.sprite.key == 'stamp') {
                 this.killPlayer();
             }
@@ -445,17 +472,15 @@ level.prototype = {
                 this.player.body.y = dest.y;
             }
         } else {
-            console.log('wall');
         }
     },
-    playerContactEnd: function(body, bodyB, shapeA, shapeB, equation) {
+    playerContactEnd: function (body, bodyB, shapeA, shapeB, equation) {
         if (body && body.sprite != undefined && (body.sprite.key == 'item' || body.sprite.key == 'box' || body.sprite.key == 'spring')) {
             this.player.possibleTakeableItem = null;
         }
     },
     processRitual: function (spriteBody) {
         var that = this;
-        console.log('ritual started', spriteBody.sprite);
         this.game.physics.p2.isPaused = true;
         this.game.paused = true;
         this.pause();
@@ -468,12 +493,10 @@ level.prototype = {
         }
     },
     ritualFinished: function (succeed, spriteBody) {
-        console.log(succeed);
         this.currentRitual = null;
         this.levelTimer.timer.resume();
         this.canMove = true;
         if (succeed) {
-            console.log('finished ritual');
             this.destroyObject(spriteBody);
             this.game.physics.p2.isPaused = false;
             this.game.paused = false;
@@ -484,7 +507,6 @@ level.prototype = {
         } else {
             this.game.physics.p2.isPaused = false;
             this.game.paused = false;
-            console.log('failed on finishing ritual');
 
         }
     },
@@ -506,8 +528,8 @@ level.prototype = {
         var anim = this.player.animations.add('death', [2, 10, 11, 12, 13], 5, true);
         anim.loop = false;
         this.countDeadBeans();
-        if(isGameOver){
-            if(typeof(Storage) !== "undefined") {
+        if (isGameOver) {
+            if (typeof(Storage) !== "undefined") {
                 localStorage.setItem("deadBeans", 0);
             }
             anim.onStart.add(function (sprite, animation) {
@@ -519,23 +541,21 @@ level.prototype = {
             anim.onStart.add(function (sprite, animation) {
                 var that = this;
                 setTimeout(function (that) {
-                    console.log('Player to Respawn',this.player);
                     that.player.frame = 2;
                     that.player.reset(that.config.player.x, that.config.player.y);
                     that.facing = 'idle';
                     that.game.physics.p2.resume();
-                }, 1000,that);
+                }, 1000, that);
             }, this);
         }
         this.music.stop();
-        console.log(!anim.isPlaying);
-        if(!anim.isPlaying) {
+        if (!anim.isPlaying) {
             anim.play();
         }
     },
-    countDeadBeans: function() {
-        if(typeof(Storage) !== "undefined") {
-            if(localStorage.getItem("deadBeans")) {
+    countDeadBeans: function () {
+        if (typeof(Storage) !== "undefined") {
+            if (localStorage.getItem("deadBeans")) {
                 var value = parseInt(localStorage.getItem("deadBeans")) + 1;
                 localStorage.setItem("deadBeans", value);
             }
@@ -545,7 +565,14 @@ level.prototype = {
     },
     winPlayer: function () {
         this.music.stop();
-        this.game.state.start('GameWon');
+        this.game.physics.p2.isPaused = true;
+        this.pause();
+        this.player.animations.stop();
+        if (this.config.nextLevel != null) {
+            this.game.state.start('Swap', true, false, this.config.nextLevel);
+        } else {
+            this.game.state.start('GameWon');
+        }
     },
     destroyObject: function (object) {
         object.sprite.destroy();
@@ -558,8 +585,5 @@ level.prototype = {
     resume: function () {
         this.levelTimer.timer.resume();
         this.canMove = true;
-    },
-    render: function () {
-        //this.game.debug.text("Time until gameover: " + Math.round(this.game.time.events.duration / 1000), 32, 32);
     }
 };

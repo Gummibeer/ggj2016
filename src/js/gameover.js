@@ -5,11 +5,7 @@ gameover.prototype = {
     bg: null,
     music: null,
     escButton: null,
-    preload: function () {
-        console.log('gameover.preload');
-    },
     create: function () {
-        console.log('gameover.create');
         this.bg = this.game.add.sprite('center', 'center', 'gameover');
         this.escButton = this.game.input.keyboard.addKey(Phaser.Keyboard.ESC);
         var anim = this.bg.animations.add('play', [0, 1], 1, true);

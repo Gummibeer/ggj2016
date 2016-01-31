@@ -15,9 +15,7 @@ var BeanRitual = function () {
     var _timeTween = null;
 
     var _processKey = function (key) {
-        console.log(key);
         var nesKey = _keys[_keycount];
-        console.log('THE KEY', key, _keys, _keycount, nesKey);
         if (key.toLowerCase() == nesKey) {
             _keycount++;
             if (_keycount == _keys.length) {
@@ -52,7 +50,6 @@ var BeanRitual = function () {
     };
 
     this.start = function (game, player, task, callback) {
-        console.log(game, task, callback);
         _time = task.time;
         _keys = task.keys;
         _callback = callback;
@@ -67,7 +64,6 @@ var BeanRitual = function () {
         _buttonMask = game.add.graphics();
         _buttonMask.beginFill(0xffffff, 1);
         _buttonMask.drawRect(0, _game.height * 0.7, _game.width, 10);
-        console.log(_buttonMask);
 
         _overlay = game.add.graphics();
         _overlay.beginFill(0x000000, 0.5);
