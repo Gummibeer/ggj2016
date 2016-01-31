@@ -27,6 +27,16 @@
   "vPlatforms": [
   ],
   "rituals": [
+    {
+      "position": {
+        "x": 512,
+        "y": 1376
+      },
+      "task": {
+        "time": 5,
+        "keys": ["b","a","f","g"]
+      }
+    }
   ],
   "teleporters": [
   ],

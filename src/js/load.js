@@ -23,6 +23,7 @@ load.prototype = {
 
         // Menu-Screen
         this.game.load.image('menuscreen', 'src/img/menuscreen.jpg');
+        this.game.load.audio('theme', ['src/audio/theme.mp3', 'src/audio/theme.ogg']);
 
         // Level 1
         this.game.load.tilemap('map-1', 'src/level/map-1.json', null, Phaser.Tilemap.TILED_JSON);
@@ -34,6 +35,7 @@ load.prototype = {
         // Level 2
         this.game.load.tilemap('map-2', 'src/level/map-2.json', null, Phaser.Tilemap.TILED_JSON);
         this.game.load.image('tiles-2', 'src/level/tiles-2.png');
+        this.game.load.image('foreground-2', 'src/level/foreground-2.png');
         this.game.load.json('config-2', 'src/level/config-2.json');
         this.game.load.image('background-2', 'src/img/level_2/background.jpg');
 
