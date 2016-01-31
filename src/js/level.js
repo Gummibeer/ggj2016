@@ -13,7 +13,7 @@ WebFontConfig = {
 };
 
 level.prototype = {
-    debug: true,
+    debug: false,
 
     bg: null,
     music: null,
