@@ -182,7 +182,6 @@ level.prototype = {
         this.hud.addChild(timeText);
         this.timeTween = setInterval(function(timeText){
             timeText.text = Math.round(game.time.events.duration / 1000);
-            bar.scale.setTo(0.95,1);
         },  that.config.leveltime*1000/1000, timeText);
         this.hud.fixedToCamera = true;
 
