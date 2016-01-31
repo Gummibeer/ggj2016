@@ -6,12 +6,10 @@
   "tilesForeground": "foreground-2",
   "layerCollision": "collision-level-2",
   "layerForeground": "foreground-level-2",
-
   "player": {
     "x": 96,
     "y": 64
   },
-
   "chains": [
   ],
   "boxes": [
@@ -29,16 +27,82 @@
   "rituals": [
     {
       "position": {
-        "x": 512,
-        "y": 1376
+        "x": 416,
+        "y": 896
       },
       "task": {
         "time": 5,
-        "keys": ["b","a","f","g"]
+        "keys": [
+          "b",
+          "a",
+          "f",
+          "g"
+        ]
+      }
+    },
+    {
+      "position": {
+        "x": 1088,
+        "y": 224
+      },
+      "task": {
+        "time": 5,
+        "keys": [
+          "b",
+          "a",
+          "f",
+          "g"
+        ]
+      }
+    },
+    {
+      "position": {
+        "x": 2432,
+        "y": 288
+      },
+      "task": {
+        "time": 5,
+        "keys": [
+          "b",
+          "a",
+          "f",
+          "g"
+        ]
+      }
+    },
+    {
+      "position": {
+        "x": 3234,
+        "y": 1344
+      },
+      "task": {
+        "time": 5,
+        "keys": [
+          "b",
+          "a",
+          "f",
+          "g"
+        ]
       }
     }
   ],
   "teleporters": [
+    {
+      "x": 192,
+      "y": 576,
+      "dest": {
+        "x": 2000,
+        "y": 960
+      }
+    },
+    {
+      "x": 1088,
+      "y": 1504,
+      "dest": {
+        "x": 800,
+        "y": 96
+      }
+    }
   ],
   "stamps": [
   ]
