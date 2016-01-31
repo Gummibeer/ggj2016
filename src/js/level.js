@@ -74,7 +74,7 @@ level.prototype = {
         this.createTilemap();
         this.createHud();
 
-        this.levelTimer = this.game.time.events.add(Phaser.Timer.SECOND * this.config.leveltime, this.killPlayer, this);
+        this.levelTimer = this.game.time.events.add(Phaser.Timer.SECOND * this.config.leveltime, function(){this.killPlayer(true)}, this);
 
         this.cursors = this.game.input.keyboard.createCursorKeys();
         this.jumpButton = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
@@ -499,20 +499,49 @@ level.prototype = {
             }
         }
     },
-    killPlayer: function () {
-        this.player.body.velocity.x = 0;
-        this.player.body.velocity.y = 0;
-        this.game.physics.p2.removeBody(this.player.body);
-        this.pause();
+    killPlayer: function (isGameOver) {
+        this.player.animations.stop();
+        this.player.frame = 10;
+        this.game.physics.p2.pause();
         var anim = this.player.animations.add('death', [2, 10, 11, 12, 13], 5, true);
         anim.loop = false;
-        anim.onComplete.add(function (sprite, animation) {
-            setTimeout(function () {
-                game.state.start('GameOver');
-            }, 1000);
-        }, this);
+        this.countDeadBeans();
+        if(isGameOver){
+            if(typeof(Storage) !== "undefined") {
+                localStorage.setItem("deadBeans", 0);
+            }
+            anim.onStart.add(function (sprite, animation) {
+                setTimeout(function () {
+                    game.state.start('GameOver');
+                }, 1000);
+            }, this);
+        } else {
+            anim.onStart.add(function (sprite, animation) {
+                var that = this;
+                setTimeout(function (that) {
+                    console.log('Player to Respawn',this.player);
+                    that.player.frame = 2;
+                    that.player.reset(that.config.player.x, that.config.player.y);
+                    that.facing = 'idle';
+                    that.game.physics.p2.resume();
+                }, 1000,that);
+            }, this);
+        }
         this.music.stop();
-        anim.play();
+        console.log(!anim.isPlaying);
+        if(!anim.isPlaying) {
+            anim.play();
+        }
+    },
+    countDeadBeans: function() {
+        if(typeof(Storage) !== "undefined") {
+            if(localStorage.getItem("deadBeans")) {
+                var value = parseInt(localStorage.getItem("deadBeans")) + 1;
+                localStorage.setItem("deadBeans", value);
+            }
+        } else {
+            // Sorry! No Web Storage support..
+        }
     },
     winPlayer: function () {
         this.music.stop();
