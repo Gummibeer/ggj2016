@@ -449,7 +449,7 @@ level.prototype = {
         }
     },
     playerContactEnd: function(body, bodyB, shapeA, shapeB, equation) {
-        if (body.sprite != undefined && (body.sprite.key == 'item' || body.sprite.key == 'box' || body.sprite.key == 'spring')) {
+        if (body && body.sprite != undefined && (body.sprite.key == 'item' || body.sprite.key == 'box' || body.sprite.key == 'spring')) {
             this.player.possibleTakeableItem = null;
         }
     },
