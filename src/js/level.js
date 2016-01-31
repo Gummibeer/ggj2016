@@ -607,5 +607,8 @@ level.prototype = {
     resume: function () {
         this.levelTimer.timer.resume();
         this.canMove = true;
+    },
+    shutdown: function() {
+        this.music.destroy();
     }
 };
