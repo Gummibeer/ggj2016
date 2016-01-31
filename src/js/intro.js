@@ -19,6 +19,6 @@ intro.prototype = {
         this.game.state.start('Level', true, false, 'config-1');
     },
     shutdown: function() {
-
+        this.game.input.keyboard.onPressCallback = null;
     }
 };
