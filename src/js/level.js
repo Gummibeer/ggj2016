@@ -396,21 +396,25 @@ level.prototype = {
     platformMovement: function () {
         var i;
         var data;
+        var x;
         for (i = 0; i < this.hPlatforms.length; i++) {
             data = this.config.hPlatforms[i];
-            if (this.hPlatforms[i].body.x < data.x1) {
+            x = Math.round(this.hPlatforms[i].body.x);
+            if (x < data.x1) {
                 this.hPlatformVelocities[i] *= -1;
-            } else if (this.hPlatforms[i].body.x > data.x2) {
+            } else if (x > data.x2) {
                 this.hPlatformVelocities[i] *= -1;
             }
             this.hPlatforms[i].body.velocity.x = this.hPlatformVelocities[i];
             this.hPlatforms[i].body.y = data.y;
         }
+        var y;
         for (i = 0; i < this.vPlatforms.length; i++) {
             data = this.config.vPlatforms[i];
-            if (this.vPlatforms[i].body.y < data.y1) {
+            y = Math.round(this.vPlatforms[i].body.y);
+            if (y < data.y1) {
                 this.vPlatformVelocities[i] *= -1;
-            } else if (this.vPlatforms[i].body.y > data.y2) {
+            } else if (y > data.y2) {
                 this.vPlatformVelocities[i] *= -1;
             }
             this.vPlatforms[i].body.velocity.y = this.vPlatformVelocities[i];
