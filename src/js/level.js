@@ -29,7 +29,7 @@ level.prototype = {
     canMove: true,
     currentRitual: null,
     fontReady: false,
-
+    hub: null,
     config: null,
     rituals: [],
     stampVelocity: 100,
@@ -63,6 +63,7 @@ level.prototype = {
         this.playerMaterial = this.game.physics.p2.createMaterial();
 
         this.createTilemap();
+        this.createHub();
 
         this.levelTimer = this.game.time.events.add(Phaser.Timer.SECOND * this.config.leveltime, this.killPlayer, this);
 
@@ -155,6 +156,15 @@ level.prototype = {
             this.stamps[i] = this.createStamp(data.x, data.y1);
             this.stampVelocities[i] = this.stampVelocity;
         }
+    },
+    createHub: function() {
+        hub = game.add.graphics();
+        hub.beginFill(0x000000, 1);
+        hub.drawRect(0, 0, this.game.width, 50);
+        hub.fixedToCamera = true;
+
+        var clockSprite = this.game.make.sprite(0, 15, 'menuclock');
+        hub.addChild(clockSprite);
     },
     createStamp: function (xAnchor, yAnchor) {
         var stamp = this.game.add.sprite(xAnchor, yAnchor, 'stamp');
@@ -253,7 +263,6 @@ level.prototype = {
 
             lastRect = newRect;
         }
-
     },
     update: function () {
         if (this.canMove) {
@@ -480,6 +489,6 @@ level.prototype = {
         this.canMove = true;
     },
     render: function () {
-        this.game.debug.text("Time until gameover: " + Math.round(this.game.time.events.duration / 1000), 32, 32);
+        //this.game.debug.text("Time until gameover: " + Math.round(this.game.time.events.duration / 1000), 32, 32);
     }
 };
