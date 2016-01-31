@@ -117,6 +117,7 @@ level.prototype = {
 
         this.game.camera.follow(this.player);
         this.player.body.onBeginContact.add(this.playerHit, this);
+        this.player.body.onEndContact.add(this.playerContactEnd, this);
         this.player.body.setMaterial(this.playerMaterial);
         return this.player;
     },
@@ -312,6 +313,15 @@ level.prototype = {
             this.winPlayer();
         }
 
+        if (this.takeButton.isDown && this.player.constraint == null && this.player.possibleTakeableItem != null) {
+            console.log('take item');
+            this.player.possibleTakeableItem.data.shapes[0].sensor = true;
+            this.player.possibleTakeableItem.fixedRotation = true;
+            this.player.attachedBody = this.player.possibleTakeableItem;
+            this.player.constraint = this.game.physics.p2.createLockConstraint(this.player, this.player.attachedBody, [0, 16], 0);
+            this.player.possibleTakeableItem = null;
+        }
+
         if (this.player.constraint != null && this.dropButton.isDown) {
             console.log('drop item');
             this.game.physics.p2.removeConstraint(this.player.constraint);
@@ -325,7 +335,6 @@ level.prototype = {
     ritualRotate: function () {
         for (var i = 0; i < this.rituals.length; i++) {
             this.rituals[i].angle += 1;
-            ;
         }
     },
     stampMovement: function () {
@@ -436,12 +445,8 @@ level.prototype = {
             if (body.sprite.key == 'spike' || body.sprite.key == 'stamp') {
                 this.killPlayer();
             }
-            if (this.player.attachedBody == null && this.takeButton.isDown && (body.sprite.key == 'item' || body.sprite.key == 'box' || body.sprite.key == 'spring')) {
-                console.log('take item');
-                body.data.shapes[0].sensor = true;
-                body.fixedRotation = true;
-                this.player.attachedBody = body;
-                this.player.constraint = this.game.physics.p2.createLockConstraint(this.player, this.player.attachedBody, [0, 16], 0);
+            if (this.player.attachedBody == null && (body.sprite.key == 'item' || body.sprite.key == 'box' || body.sprite.key == 'spring')) {
+                this.player.possibleTakeableItem = body;
             } else if (body.sprite.key == 'ritual') {
                 this.processRitual(body);
             } else if (body.sprite.key == 'teleporter') {
@@ -451,6 +456,11 @@ level.prototype = {
             }
         } else {
             console.log('wall');
+        }
+    },
+    playerContactEnd: function(body, bodyB, shapeA, shapeB, equation) {
+        if (body.sprite != undefined && (body.sprite.key == 'item' || body.sprite.key == 'box' || body.sprite.key == 'spring')) {
+            this.player.possibleTakeableItem = null;
         }
     },
     processRitual: function (spriteBody) {
