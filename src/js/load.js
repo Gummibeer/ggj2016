@@ -33,7 +33,6 @@ load.prototype = {
         // Menu-Screen
         this.game.load.image('menuscreen', 'src/img/menuscreen.jpg');
         this.game.load.image('btnstart', 'src/img/btnstart.png');
-        this.game.load.image('btnstart_hover', 'src/img/btnstart_hover.png');
 
         this.game.load.audio('theme', ['src/audio/theme.mp3', 'src/audio/theme.ogg']);
         this.game.load.image('menuclock', 'src/img/menu_ic_time.png');

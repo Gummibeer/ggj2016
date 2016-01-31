@@ -610,5 +610,8 @@ level.prototype = {
     },
     shutdown: function() {
         this.music.destroy();
+        this.game.physics.p2.reset();
+        this.game.physics.p2.clear();
+        this.levelTimer.timer.removeAll();
     }
 };
