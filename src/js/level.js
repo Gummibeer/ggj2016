@@ -528,6 +528,7 @@ level.prototype = {
             this.game.physics.p2.isPaused = false;
             this.game.paused = false;
             this.solvedRituals++;
+            this.countSolvedRituals();
             if (this.solvedRituals == this.config.rituals.length) {
                 this.winPlayer();
             }
@@ -556,9 +557,6 @@ level.prototype = {
         anim.loop = false;
         this.countDeadBeans();
         if (isGameOver) {
-            if (typeof(Storage) !== "undefined") {
-                localStorage.setItem("deadBeans", 0);
-            }
             anim.onStart.add(function (sprite, animation) {
                 setTimeout(function () {
                     game.state.start('GameOver');
@@ -601,11 +599,28 @@ level.prototype = {
             anim.play();
         }
     },
+    countSolvedRituals: function() {
+        console.log('countSolvedRituals');
+        if (typeof(Storage) !== "undefined") {
+            if (localStorage.getItem("solvedRituals")) {
+                var value = parseInt(localStorage.getItem("solvedRituals")) + 1;
+                localStorage.setItem("solvedRituals", value);
+                renderScores();
+            } else {
+                localStorage.setItem("solvedRituals", 0);
+            }
+        } else {
+            // Sorry! No Web Storage support..
+        }
+    },
     countDeadBeans: function () {
         if (typeof(Storage) !== "undefined") {
             if (localStorage.getItem("deadBeans")) {
                 var value = parseInt(localStorage.getItem("deadBeans")) + 1;
                 localStorage.setItem("deadBeans", value);
+                renderScores();
+            } else {
+                localStorage.setItem("deadBeans", 0);
             }
         } else {
             // Sorry! No Web Storage support..

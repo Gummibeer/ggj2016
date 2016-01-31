@@ -16,7 +16,6 @@ load.prototype = {
         this.game.load.image('wheel3', 'src/img/backgrounds/wheel3.png');
         this.game.load.image('wheel4', 'src/img/backgrounds/wheel4.png');
         this.game.load.image('wheel5', 'src/img/backgrounds/wheel5.png');
-        this.game.load.image('wheel6', 'src/img/backgrounds/wheel6.png');
 
         this.game.load.image('iconflost', 'src/img/icon_bean_white.png');
 
