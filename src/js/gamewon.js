@@ -19,8 +19,15 @@ gamewon.prototype = {
     },
     update: function () {
         if (this.escButton.isDown) {
-            this.music.stop();
-            this.game.state.start('Menu');
+            this.goToMenu();
+        } else {
+            this.game.input.keyboard.onPressCallback = this.goToMenu;
         }
+    },
+    goToMenu: function() {
+        if(this.music != undefined) {
+            this.music.stop();
+        }
+        this.game.state.start('Menu');
     }
 };

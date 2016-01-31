@@ -1,10 +1,9 @@
 body{
-    height: 100%;
+    min-height: 100%;
     width: 100%;
     margin: 0;
     background: #000000;
     color: #ffffff;
-    overflow: hidden;
     font-family: 'Lato', sans-serif;
     font-size: 16px;
 }
@@ -14,9 +13,20 @@ body{
     width: 1280px;
 }
 
+a {
+    color: #dd962e;
+    text-decoration: underline;
+}
+
+a:active,
+a:hover,
+a:focus {
+    color: #dd962e;
+}
+
 p {
     margin: 0;
-    padding: 10px 30px;
+    padding: 10px 0;
     background: #000000;
     text-transform: uppercase;
 }
@@ -24,4 +34,16 @@ p {
 p strong {
     color: #dd962e;
     font-weight: 400;
+}
+
+.pull-left {
+    float: left;
+}
+
+.pull-right {
+    float: right;
+}
+
+.text-center {
+    text-align: center;
 }
