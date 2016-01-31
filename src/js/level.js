@@ -13,7 +13,7 @@ WebFontConfig = {
 };
 
 level.prototype = {
-    debug: false,
+    debug: true,
 
     bg: null,
     music: null,
@@ -382,9 +382,10 @@ level.prototype = {
         for (var i = 0; i < this.stamps.length; i++) {
             data = this.config.stamps[i];
             if (this.stamps[i].body) {
-                if (this.stamps[i].body.y < data.y1) {
+                var y = Math.round(this.stamps[i].body.y);
+                if (y < data.y1) {
                     this.stampVelocities[i] *= -1;
-                } else if (this.stamps[i].body.y > data.y2) {
+                } else if (y > data.y2) {
                     this.stampVelocities[i] *= -1;
                 }
                 this.stamps[i].body.velocity.y = this.stampVelocities[i];
