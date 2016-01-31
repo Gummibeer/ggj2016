@@ -73,6 +73,11 @@
   "items": [
   ],
   "hPlatforms": [
+    {
+      "x1": 448,
+      "x2": 32,
+      "y": 704
+    }
   ],
   "vPlatforms": [
   ],
