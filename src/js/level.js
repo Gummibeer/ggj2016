@@ -37,6 +37,7 @@ level.prototype = {
     fontReady: false,
     hud: null,
     config: null,
+    wheels: [],
     rituals: [],
     stampVelocity: 100,
     stamps: [],
@@ -71,6 +72,7 @@ level.prototype = {
         this.fontReady = false;
         this.hud = null;
         this.config = config;
+        this.wheels = [];
         this.rituals = [];
         this.stampVelocity = 100;
         this.stamps = [];
@@ -97,6 +99,7 @@ level.prototype = {
 
         this.playerMaterial = this.game.physics.p2.createMaterial();
 
+        this.createBackgrounds();
         this.createTilemap();
         this.createHud();
 
@@ -111,6 +114,19 @@ level.prototype = {
         this.escButton = this.game.input.keyboard.addKey(Phaser.Keyboard.ESC);
 
         this.canMove = true;
+    },
+    createBackgrounds: function () {
+        var data;
+        for (var i = 0; i < this.config.wheels.length; i++) {
+            data = this.config.wheels[i];
+            this.wheels[i] = this.createWheel(data.x, data.y, data.image);
+        }
+    },
+    createWheel: function(xAnchor, yAnchor, image) {
+        var wheel = this.game.add.sprite(xAnchor, yAnchor, image);
+        wheel.anchor.x = 0.5;
+        wheel.anchor.y = 0.5;
+        return wheel;
     },
     createTilemap: function () {
         this.map = this.game.add.tilemap(this.config.map);
@@ -327,6 +343,7 @@ level.prototype = {
             this.platformMovement();
             this.stampMovement();
             this.ritualRotate();
+            this.wheelRotate();
         }
 
         if (this.solvedRituals == this.config.rituals.length) {
@@ -348,6 +365,11 @@ level.prototype = {
             this.player.attachedBody.data.shapes[0].sensor = false;
             this.player.attachedBody = null;
             this.player.frame = 2;
+        }
+    },
+    wheelRotate: function () {
+        for (var i = 0; i < this.wheels.length; i++) {
+            this.wheels[i].angle += 1;
         }
     },
     ritualRotate: function () {

@@ -11,6 +11,10 @@ load.prototype = {
         this.game.load.image('btnstart', 'src/img/btnstart.png');
         this.game.load.video('intro', 'src/video/intro.mp4');
 
+        // Backgrounds
+        this.game.load.image('wheel1', 'src/img/backgrounds/wheel1.png');
+
+        // Objects
         this.game.load.spritesheet('bean', 'src/img/objects/bean.png', 163, 163);
         this.game.load.spritesheet('chain', 'src/img/objects/chain.png', 16, 26);
         this.game.load.spritesheet('teleporter', 'src/img/objects/teleporter.png', 49, 64);
