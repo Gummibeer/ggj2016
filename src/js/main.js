@@ -1,3 +1,8 @@
+function renderScores() {
+    document.getElementById('deadBeans').innerText = localStorage.getItem("deadBeans");
+    document.getElementById('solvedRituals').innerText = '14';
+}
+
 var game = new Phaser.Game(1280, 720, Phaser.CANVAS, 'stage', {});
 
 game.state.add('Boot', boot);
@@ -12,3 +17,5 @@ game.state.add('GameWon', gamewon);
 game.state.add('GameOver', gameover);
 
 game.state.start('Boot');
+
+renderScores();
