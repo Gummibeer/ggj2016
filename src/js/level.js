@@ -25,6 +25,7 @@ level.prototype = {
     jumpButton: null,
     takeButton: null,
     dropButton: null,
+    escButton: null,
     buttonMask: null,
     timeTween: null,
     jumpTimer: 0,
@@ -79,6 +80,7 @@ level.prototype = {
         this.jumpButton = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
         this.takeButton = this.game.input.keyboard.addKey(Phaser.Keyboard.T);
         this.dropButton = this.game.input.keyboard.addKey(Phaser.Keyboard.D);
+        this.escButton = this.game.input.keyboard.addKey(Phaser.Keyboard.ESC);
     },
     createTilemap: function () {
         this.map = this.game.add.tilemap(this.config.map);
@@ -165,7 +167,7 @@ level.prototype = {
             this.stampVelocities[i] = this.stampVelocity;
         }
     },
-    createHud: function() {
+    createHud: function () {
         var that = this;
         this.hud = game.add.graphics();
         this.hud.beginFill(0x000000, 1);
@@ -173,10 +175,10 @@ level.prototype = {
         this.buttonMask = game.add.graphics();
         this.buttonMask.beginFill(0xffffff, 0.8);
         this.buttonMask.drawRect(0, 50, game.width, 8);
-        this.buttonMask.fixedToCamera= true;
+        this.buttonMask.fixedToCamera = true;
         var bar = game.add.graphics();
         bar.beginFill(0xdd962e, 1);
-        bar.drawRect(0,50, game.width, 8);
+        bar.drawRect(0, 50, game.width, 8);
         var timeText = game.add.text(40, 12, "");
         timeText.font = 'Lato';
         timeText.fontSize = 24;
@@ -186,11 +188,11 @@ level.prototype = {
         timeText.boundsAlignV = "middle";
         this.buttonMask.addChild(bar);
         this.buttonMask.addChild(timeText);
-        this.timeTween=setInterval(function(bar, timeText){
-            var step = game.width/1000;
-            bar.x = bar.x-step;
+        this.timeTween = setInterval(function (bar, timeText) {
+            var step = game.width / 1000;
+            bar.x = bar.x - step;
             timeText.text = Math.round(game.time.events.duration / 1000);
-        },  that.config.leveltime*1000/1000, bar, timeText);
+        }, that.config.leveltime * 1000 / 1000, bar, timeText);
         this.hud.fixedToCamera = true;
 
         var clockSprite = this.game.make.sprite(10, 15, 'menuclock');
@@ -295,6 +297,10 @@ level.prototype = {
         }
     },
     update: function () {
+        if (this.escButton.isDown) {
+            this.game.state.start('Menu');
+        }
+
         if (this.canMove) {
             this.movement();
             this.platformMovement();
@@ -496,13 +502,13 @@ level.prototype = {
     killPlayer: function () {
         this.player.body.velocity.x = 0;
         this.player.body.velocity.y = 0;
-        this.game.physics.p2.removeBody(this.player.body);;
+        this.game.physics.p2.removeBody(this.player.body);
         this.pause();
         var anim = this.player.animations.add('death', [2, 10, 11, 12, 13], 5, true);
         anim.loop = false;
         anim.onComplete.add(function (sprite, animation) {
             setTimeout(function () {
-                this.game.state.start('GameOver');
+                game.state.start('GameOver');
             }, 1000);
         }, this);
         this.music.stop();

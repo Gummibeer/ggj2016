@@ -12,7 +12,7 @@ menu.prototype = {
         this.bg = this.game.add.tileSprite(0, 0, this.game.width, this.game.height, 'menuscreen');
         this.bg.fixedToCamera = true;
 
-        var button = this.game.add.button(this.game.world.centerX - 95, 400, 'button', this.click, this, 2, 1, 0);
+        var button = this.game.add.button(this.game.world.centerX - 400, 500, 'btnstart', this.click, this, 2, 1, 0);
     },
     click: function () {
         console.log('button click');

@@ -9,16 +9,17 @@ load.prototype = {
         this.load.setPreloadSprite(loadingBar);
 
         this.game.load.script('webfont', '//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js');
+        this.game.load.image('btnstart', 'src/img/btnstart.png');
 
         this.game.load.spritesheet('bean', 'src/img/objects/bean.png', 163, 163);
         this.game.load.spritesheet('chain', 'src/img/objects/chain.png', 16, 26);
+        this.game.load.spritesheet('teleporter', 'src/img/objects/teleporter.png', 49, 64);
         this.game.load.image('box', 'src/img/objects/box.png');
         this.game.load.image('spring', 'src/img/objects/spring.png');
         this.game.load.image('spike', 'src/img/objects/spike.png');
         this.game.load.image('item', 'src/img/objects/item.png');
         this.game.load.image('platform', 'src/img/objects/platform.png');
         this.game.load.image('ritual', 'src/img/objects/ritual.png');
-        this.game.load.image('teleporter', 'src/img/objects/teleporter.png');
         this.game.load.image('stamp', 'src/img/objects/stamp.png');
 
         // Menu-Screen

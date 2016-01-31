@@ -66,7 +66,7 @@ var BeanRitual = function () {
     var _showTasks = function () {
         _buttonMask = game.add.graphics();
         _buttonMask.beginFill(0xffffff, 1);
-        _buttonMask.drawRect(0, _game.height*0.7, _game.width, 10);
+        _buttonMask.drawRect(0, _game.height * 0.7, _game.width, 10);
         console.log(_buttonMask);
 
         _overlay = game.add.graphics();
@@ -80,7 +80,7 @@ var BeanRitual = function () {
         _overlay.fixedToCamera = true;
         _overlay_y.fixedToCamera = true;
         _buttonMask.fixedToCamera = true;
-        _overlayText = _game.add.text(0, 0,"COMBINATION TO SABOTAGE THE MACHINE");
+        _overlayText = _game.add.text(0, 0, "COMBINATION TO SABOTAGE THE MACHINE");
 
         _overlayText.font = 'Lato';
         _overlayText.fontSize = 24;
@@ -98,7 +98,7 @@ var BeanRitual = function () {
         _overlayText_use.boundsAlignV = "middle";
 
 
-        _overlayText_keys = _game.add.text(0, 0,_keys[0].toUpperCase() + "    " + _keys[1].toUpperCase() +  "    " + _keys[2].toUpperCase()  + "    " + _keys[3].toUpperCase());
+        _overlayText_keys = _game.add.text(0, 0, _keys[0].toUpperCase() + "    " + _keys[1].toUpperCase() + "    " + _keys[2].toUpperCase() + "    " + _keys[3].toUpperCase());
         _overlayText_keys.font = 'Lato';
         _overlayText_keys.fontSize = 90;
         _overlayText_keys.align = 'center';
@@ -106,9 +106,9 @@ var BeanRitual = function () {
         _overlayText_keys.boundsAlignH = "center";
         _overlayText_keys.boundsAlignV = "middle";
 
-        _timeTween=setInterval(function(){
-            var step = _game.width/200;
-            _buttonMask.x = _buttonMask.x-step;
+        _timeTween = setInterval(function () {
+            var step = _game.width / 200;
+            _buttonMask.x = _buttonMask.x - step;
         }, 25);
         _overlayText.fixedToCamera = true;
         _overlayText_use.fixedToCamera = true;
