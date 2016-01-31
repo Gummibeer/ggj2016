@@ -13,9 +13,12 @@ intro.prototype = {
         this.video.play();
     },
     update: function() {
-        this.game.input.keyboard.onPressCallback = this.videoEnd;
+        var that=this;
+        this.game.input.keyboard.onPressCallback = function(){that.videoEnd(that.video);}
     },
-    videoEnd: function() {
+    videoEnd: function(myVideo) {
+        myVideo.stop();
+        myVideo.destroy();
         this.game.state.start('Level', true, false, 'config-1');
     },
     shutdown: function() {
