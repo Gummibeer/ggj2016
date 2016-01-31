@@ -177,11 +177,20 @@ level.prototype = {
         var bar = game.add.graphics();
         bar.beginFill(0xdd962e, 1);
         bar.drawRect(0,50, game.width, 8);
+        var timeText = game.add.text(40, 12, "");
+        timeText.font = 'Lato';
+        timeText.fontSize = 24;
+        timeText.align = 'center';
+        timeText.fill = '#ffffff';
+        timeText.boundsAlignH = "center";
+        timeText.boundsAlignV = "middle";
         this.buttonMask.addChild(bar);
-        this.timeTween=setInterval(function(bar){
+        this.buttonMask.addChild(timeText);
+        this.timeTween=setInterval(function(bar, timeText){
             var step = game.width/1000;
             bar.x = bar.x-step;
-        },  that.config.leveltime*1000/1000, bar);
+            timeText.text = Math.round(game.time.events.duration / 1000);
+        },  that.config.leveltime*1000/1000, bar, timeText);
         this.hud.fixedToCamera = true;
 
         var clockSprite = this.game.make.sprite(10, 15, 'menuclock');
