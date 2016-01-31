@@ -171,33 +171,23 @@ level.prototype = {
     createHud: function () {
         var that = this;
         this.hud = game.add.graphics();
-        this.hud.beginFill(0x000000, 1);
-        this.hud.drawRect(0, 0, this.game.width, 50);
-        this.buttonMask = game.add.graphics();
-        this.buttonMask.beginFill(0xffffff, 0.8);
-        this.buttonMask.drawRect(0, 50, game.width, 8);
-        this.buttonMask.fixedToCamera = true;
-        var bar = game.add.graphics();
-        bar.beginFill(0xdd962e, 1);
-        bar.drawRect(0, 50, game.width, 8);
-        var timeText = game.add.text(40, 12, "");
+        this.hud.beginFill(0x000000, 0);
+        this.hud.drawRect(0, 0, this.game.width, 150);
+        var timeText = game.add.text(20, 10, "");
         timeText.font = 'Lato';
-        timeText.fontSize = 24;
+        timeText.fontSize = 150;
+        timeText.fontWeight = 'bold';
         timeText.align = 'center';
         timeText.fill = '#ffffff';
-        timeText.boundsAlignH = "center";
-        timeText.boundsAlignV = "middle";
-        this.buttonMask.addChild(bar);
-        this.buttonMask.addChild(timeText);
-        this.timeTween = setInterval(function (bar, timeText) {
-            var step = game.width / 1000;
-            bar.x = bar.x - step;
+        timeText.setShadow(8, 8, 'rgba(0,0,0,0.8)', 8);
+        this.hud.addChild(timeText);
+        this.timeTween = setInterval(function(timeText){
             timeText.text = Math.round(game.time.events.duration / 1000);
-        }, that.config.leveltime * 1000 / 1000, bar, timeText);
+        },  that.config.leveltime*1000/1000, timeText);
         this.hud.fixedToCamera = true;
 
-        var clockSprite = this.game.make.sprite(10, 15, 'menuclock');
-        this.hud.addChild(clockSprite);
+       // var clockSprite = this.game.make.sprite(10, 15, 'menuclock');
+       // this.hud.addChild(clockSprite);
     },
     createStamp: function (xAnchor, yAnchor) {
         var stamp = this.game.add.sprite(xAnchor, yAnchor, 'stamp');
