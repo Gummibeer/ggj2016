@@ -36,6 +36,7 @@ load.prototype = {
         this.game.load.image('btnstart', 'src/img/btnstart.png');
 
         this.game.load.audio('theme', ['src/audio/theme.mp3', 'src/audio/theme.ogg']);
+        this.game.load.audio('death', ['src/audio/death.mp3', 'src/audio/death.ogg']);
         this.game.load.image('menuclock', 'src/img/menu_ic_time.png');
 
         // Level 1

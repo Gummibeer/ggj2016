@@ -19,7 +19,7 @@ intro.prototype = {
     videoEnd: function(myVideo) {
         myVideo.stop();
         myVideo.destroy();
-        this.game.state.start('Level', true, false, 'config-2');
+        this.game.state.start('Level', true, false, 'config-1');
     },
     shutdown: function() {
         this.game.input.keyboard.onPressCallback = null;
