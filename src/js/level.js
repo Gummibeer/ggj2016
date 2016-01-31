@@ -2,8 +2,8 @@ var level = function (game) {
 };
 
 WebFontConfig = {
-    active: function() {
-        window.fontReady=true;
+    active: function () {
+        window.fontReady = true;
     },
     //  The Google Fonts we want to load (specify as many as you like in the array)
     google: {
@@ -13,7 +13,10 @@ WebFontConfig = {
 };
 
 level.prototype = {
+    debug: true,
+
     bg: null,
+    music: null,
     map: null,
     layer: null,
     foreground: null,
@@ -60,6 +63,9 @@ level.prototype = {
         this.bg = this.game.add.tileSprite(0, 0, this.game.width, this.game.height, this.config.background);
         this.bg.fixedToCamera = true;
 
+        this.music = this.game.add.audio('theme');
+        this.music.loopFull();
+
         this.playerMaterial = this.game.physics.p2.createMaterial();
 
         this.createTilemap();
@@ -81,7 +87,7 @@ level.prototype = {
         this.createObjects();
         this.createPlayer();
         this.foreground = this.map.createLayer(this.config.layerForeground);
-        this.layer.debug = true;
+        this.layer.debug = this.debug;
         this.layer.resizeWorld();
         this.game.physics.p2.convertTilemap(this.map, this.layer);
     },
@@ -91,12 +97,12 @@ level.prototype = {
         this.player.scale.y = 0.35;
         this.game.physics.p2.enable(this.player);
         this.player.body.setCircle(25);
-        this.player.anchor.setTo(0.5,0.6);
+        this.player.anchor.setTo(0.5, 0.6);
         this.player.body.collideWorldBounds = true;
         this.player.body.fixedRotation = true;
         this.player.body.x = this.config.player.x;
         this.player.body.y = this.config.player.y;
-        this.player.body.debug = true;
+        this.player.body.debug = this.debug;
         this.player.animations.add('left', [4, 3], 20, true);
         this.player.animations.add('turn', [2], 40, true);
         this.player.animations.add('right', [0, 1], 20, true);
@@ -169,7 +175,7 @@ level.prototype = {
     createStamp: function (xAnchor, yAnchor) {
         var stamp = this.game.add.sprite(xAnchor, yAnchor, 'stamp');
         this.game.physics.p2.enable(stamp);
-        stamp.body.debug = true;
+        stamp.body.debug = this.debug;
         stamp.body.mass = 9999;
         stamp.body.data.gravityScale = 0;
         stamp.body.data.motionState = 1;
@@ -187,7 +193,7 @@ level.prototype = {
         var ritual = this.game.add.sprite(xAnchor, yAnchor, 'ritual');
         this.game.physics.p2.enable(ritual);
         ritual.body.setCircle(60);
-        ritual.body.debug = true;
+        ritual.body.debug = this.debug;
         ritual.body.fixedRotation = true;
         ritual.body.static = true;
         ritual.bean = {};
@@ -197,7 +203,7 @@ level.prototype = {
     createPlatform: function (xAnchor, yAnchor) {
         var platform = this.game.add.sprite(xAnchor, yAnchor, 'platform');
         this.game.physics.p2.enable(platform);
-        platform.body.debug = true;
+        platform.body.debug = this.debug;
         platform.body.mass = 9999;
         platform.body.data.gravityScale = 0;
         platform.body.data.motionState = 1;
@@ -286,9 +292,10 @@ level.prototype = {
             this.player.frame = 2;
         }
     },
-    ritualRotate: function() {
+    ritualRotate: function () {
         for (var i = 0; i < this.rituals.length; i++) {
-            this.rituals[i].angle += 1;;
+            this.rituals[i].angle += 1;
+            ;
         }
     },
     stampMovement: function () {
@@ -471,9 +478,11 @@ level.prototype = {
                 this.game.state.start('GameOver');
             }, 1000);
         }, this);
+        this.music.stop();
         anim.play();
     },
     winPlayer: function () {
+        this.music.stop();
         this.game.state.start('GameWon');
     },
     destroyObject: function (object) {

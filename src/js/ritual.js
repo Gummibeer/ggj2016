@@ -71,7 +71,7 @@ var BeanRitual = function () {
 
         _overlay = game.add.graphics();
         _overlay.beginFill(0x000000, 0.5);
-        _overlay.drawRect(0, 0, _game.width, _game.height*0.7);
+        _overlay.drawRect(0, 0, _game.width, _game.height * 0.7);
 
         _overlay_y = game.add.graphics();
         _overlay_y.beginFill(0xfdd835, 1);
@@ -86,16 +86,16 @@ var BeanRitual = function () {
         _overlayText.fontSize = 24;
         _overlayText.align = 'center';
         _overlayText.fill = '#000000';
-        _overlayText.boundsAlignH= "center";
-        _overlayText.boundsAlignV= "middle";
+        _overlayText.boundsAlignH = "center";
+        _overlayText.boundsAlignV = "middle";
 
-        _overlayText_use = _game.add.text(0, 0,"USE");
+        _overlayText_use = _game.add.text(0, 0, "USE");
         _overlayText_use.font = 'Lato';
         _overlayText_use.fontSize = 72;
         _overlayText_use.align = 'center';
         _overlayText_use.fill = '#ffffff';
-        _overlayText_use.boundsAlignH= "center";
-        _overlayText_use.boundsAlignV= "middle";
+        _overlayText_use.boundsAlignH = "center";
+        _overlayText_use.boundsAlignV = "middle";
 
 
         _overlayText_keys = _game.add.text(0, 0,_keys[0].toUpperCase() + "    " + _keys[1].toUpperCase() +  "    " + _keys[2].toUpperCase()  + "    " + _keys[3].toUpperCase());
@@ -103,8 +103,8 @@ var BeanRitual = function () {
         _overlayText_keys.fontSize = 90;
         _overlayText_keys.align = 'center';
         _overlayText_keys.fill = '#ffffff';
-        _overlayText_keys.boundsAlignH= "center";
-        _overlayText_keys.boundsAlignV= "middle";
+        _overlayText_keys.boundsAlignH = "center";
+        _overlayText_keys.boundsAlignV = "middle";
 
         _timeTween=setInterval(function(){
             var step = _game.width/200;
@@ -115,8 +115,8 @@ var BeanRitual = function () {
         _overlayText_keys.fixedToCamera = true;
 
         _overlayText.setTextBounds(0, 50, _game.width, 50);
-        _overlayText_use.setTextBounds(0, 0, _game.width,  _game.height*0.7-150);
-        _overlayText_keys.setTextBounds(0, 0, _game.width,  _game.height*0.7+150);
+        _overlayText_use.setTextBounds(0, 0, _game.width, _game.height * 0.7 - 150);
+        _overlayText_keys.setTextBounds(0, 0, _game.width, _game.height * 0.7 + 150);
     }
 
 };
