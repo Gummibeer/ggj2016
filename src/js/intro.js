@@ -10,7 +10,7 @@ intro.prototype = {
         this.video = this.game.add.video('intro');
         this.video.onComplete.addOnce(this.videoEnd, this);
         var sprite = this.video.addToWorld(640, 360, 0.5, 0.5);
-        this.video.play(true);
+        this.video.play();
     },
     update: function() {
         this.game.input.keyboard.onPressCallback = this.videoEnd;
