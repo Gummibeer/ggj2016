@@ -24,6 +24,7 @@ load.prototype = {
         // Menu-Screen
         this.game.load.image('menuscreen', 'src/img/menuscreen.jpg');
         this.game.load.audio('theme', ['src/audio/theme.mp3', 'src/audio/theme.ogg']);
+        this.game.load.image('menuclock', 'src/img/menu_ic_time.png');
 
         // Level 1
         this.game.load.tilemap('map-1', 'src/level/map-1.json', null, Phaser.Tilemap.TILED_JSON);

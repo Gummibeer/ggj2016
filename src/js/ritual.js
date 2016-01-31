@@ -31,12 +31,12 @@ var BeanRitual = function () {
     var _destroy = function () {
         game.input.keyboard.onPressCallback = null;
         clearTimeout(_timeout);
+        clearInterval(_timeTween);
         _overlay.destroy();
         _overlayText.destroy();
         _overlay_y.destroy();
         _overlayText_use.destroy();
         _overlayText_keys.destroy();
-        clearInterval(_timeTween);
         _buttonMask.destroy();
 
     };
@@ -64,6 +64,10 @@ var BeanRitual = function () {
     };
 
     var _showTasks = function () {
+        _buttonMask = game.add.graphics();
+        _buttonMask.beginFill(0xffffff, 1);
+        _buttonMask.drawRect(0, _game.height*0.7, _game.width, 10);
+        console.log(_buttonMask);
 
         _overlay = game.add.graphics();
         _overlay.beginFill(0x000000, 0.5);
@@ -75,6 +79,7 @@ var BeanRitual = function () {
 
         _overlay.fixedToCamera = true;
         _overlay_y.fixedToCamera = true;
+        _buttonMask.fixedToCamera = true;
         _overlayText = _game.add.text(0, 0,"COMBINATION TO SABOTAGE THE MACHINE");
 
         _overlayText.font = 'Lato';
@@ -101,19 +106,13 @@ var BeanRitual = function () {
         _overlayText_keys.boundsAlignH = "center";
         _overlayText_keys.boundsAlignV = "middle";
 
-        _buttonMask = game.add.graphics(0, 0);
-        _buttonMask.beginFill(0xffffff);
-        _buttonMask.drawRect(_player.body.x - _game.width/2 ,_game.height*0.7, _game.width, 10);
-        _buttonMask.endFill();
-        console.log(_buttonMask);
         _timeTween=setInterval(function(){
             var step = _game.width/200;
-            _buttonMask.x = _buttonMask.x - step;
+            _buttonMask.x = _buttonMask.x-step;
         }, 25);
         _overlayText.fixedToCamera = true;
         _overlayText_use.fixedToCamera = true;
         _overlayText_keys.fixedToCamera = true;
-
 
         _overlayText.setTextBounds(0, 50, _game.width, 50);
         _overlayText_use.setTextBounds(0, 0, _game.width, _game.height * 0.7 - 150);
