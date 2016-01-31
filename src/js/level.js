@@ -564,6 +564,27 @@ level.prototype = {
                 var that = this;
                 setTimeout(function (that) {
                     that.player.frame = 2;
+                    var info = game.add.graphics();
+                    info.beginFill(0x000000, 0.5);
+                    info.drawRect(220, 35, this.game.width-400, 100);
+                    that.hud.addChild(info);
+                    var _overlayText = game.add.text(0, 0, "OH, NOES! You have lost "+ localStorage.getItem("deadBeans") +" friends");
+                    _overlayText.font = 'Lato';
+                    _overlayText.fontSize = 36;
+                    _overlayText.align = 'center';
+                    _overlayText.fill = '#ffffff';
+                    _overlayText.fontWeight = 'bold';
+                    _overlayText.boundsAlignH = "center";
+                    _overlayText.boundsAlignV = "middle";
+                    _overlayText.setTextBounds(220, 35, this.game.width-400, 100);
+                    var deadico = game.make.sprite(260, 50, 'iconflost');
+                    deadico.scale.x = 0.7;
+                    deadico.scale.y = 0.6;
+                    info.addChild(deadico);
+                    info.addChild(_overlayText);
+                    setTimeout(function(theInfo){
+                        theInfo.destroy();
+                    },2500,info);
                     that.player.reset(that.config.player.x, that.config.player.y);
                     that.facing = 'idle';
                     that.game.physics.p2.resume();
