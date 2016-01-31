@@ -553,6 +553,8 @@ level.prototype = {
         this.player.animations.stop();
         this.player.frame = 10;
         this.game.physics.p2.pause();
+        var sound = this.game.add.audio('death');
+        sound.play();
         var anim = this.player.animations.add('death', [2, 10, 11, 12, 13], 5, true);
         anim.loop = false;
         this.countDeadBeans();

@@ -47,3 +47,27 @@ p strong {
 .text-center {
     text-align: center;
 }
+
+.icon {
+    width: 24px;
+    vertical-align: middle;
+    margin-right: 8px;
+}
+
+.block {
+    font-size: 24px;
+    padding: 0 15px;
+    float: left;
+}
+
+.block + .block {
+    border-left: 1px solid #ffffff;
+}
+
+.clearfix:after {
+    content: ".";
+    clear: both;
+    display: block;
+    visibility: hidden;
+    height: 0px;
+}
