@@ -13,7 +13,7 @@ WebFontConfig = {
 };
 
 level.prototype = {
-    debug: true,
+    debug: false,
 
     bg: null,
     music: null,
@@ -25,6 +25,8 @@ level.prototype = {
     jumpButton: null,
     takeButton: null,
     dropButton: null,
+    buttonMask: null,
+    timeTween: null,
     jumpTimer: 0,
     facing: 'right',
     playerMaterial: null,
@@ -32,7 +34,7 @@ level.prototype = {
     canMove: true,
     currentRitual: null,
     fontReady: false,
-    hub: null,
+    hud: null,
     config: null,
     rituals: [],
     stampVelocity: 100,
@@ -69,7 +71,7 @@ level.prototype = {
         this.playerMaterial = this.game.physics.p2.createMaterial();
 
         this.createTilemap();
-        this.createHub();
+        this.createHud();
 
         this.levelTimer = this.game.time.events.add(Phaser.Timer.SECOND * this.config.leveltime, this.killPlayer, this);
 
@@ -163,14 +165,27 @@ level.prototype = {
             this.stampVelocities[i] = this.stampVelocity;
         }
     },
-    createHub: function() {
-        hub = game.add.graphics();
-        hub.beginFill(0x000000, 1);
-        hub.drawRect(0, 0, this.game.width, 50);
-        hub.fixedToCamera = true;
+    createHud: function() {
+        var that = this;
+        this.hud = game.add.graphics();
+        this.hud.beginFill(0x000000, 1);
+        this.hud.drawRect(0, 0, this.game.width, 50);
+        this.buttonMask = game.add.graphics();
+        this.buttonMask.beginFill(0xffffff, 0.8);
+        this.buttonMask.drawRect(0, 50, game.width, 8);
+        this.buttonMask.fixedToCamera= true;
+        var bar = game.add.graphics();
+        bar.beginFill(0xdd962e, 1);
+        bar.drawRect(0,50, game.width, 8);
+        this.buttonMask.addChild(bar);
+        this.timeTween=setInterval(function(bar){
+            var step = game.width/1000;
+            bar.x = bar.x-step;
+        },  that.config.leveltime*1000/1000, bar);
+        this.hud.fixedToCamera = true;
 
-        var clockSprite = this.game.make.sprite(0, 15, 'menuclock');
-        hub.addChild(clockSprite);
+        var clockSprite = this.game.make.sprite(10, 15, 'menuclock');
+        this.hud.addChild(clockSprite);
     },
     createStamp: function (xAnchor, yAnchor) {
         var stamp = this.game.add.sprite(xAnchor, yAnchor, 'stamp');
