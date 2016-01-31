@@ -184,7 +184,7 @@ level.prototype = {
         },  that.config.leveltime*1000/1000, bar);
         this.hud.fixedToCamera = true;
 
-        var clockSprite = this.game.make.sprite(0, 15, 'menuclock');
+        var clockSprite = this.game.make.sprite(10, 15, 'menuclock');
         this.hud.addChild(clockSprite);
     },
     createStamp: function (xAnchor, yAnchor) {
