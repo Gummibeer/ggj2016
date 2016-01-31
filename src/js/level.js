@@ -494,6 +494,9 @@ level.prototype = {
         }
     },
     killPlayer: function () {
+        this.player.body.velocity.x = 0;
+        this.player.body.velocity.y = 0;
+        this.game.physics.p2.removeBody(this.player.body);;
         this.pause();
         var anim = this.player.animations.add('death', [2, 10, 11, 12, 13], 5, true);
         anim.loop = false;
