@@ -599,6 +599,7 @@ level.prototype = {
                     that.player.reset(that.config.player.x, that.config.player.y);
                     that.facing = 'idle';
                     that.game.physics.p2.resume();
+                    that.music.play();
                 }, 1000, that);
             }, this);
         }
