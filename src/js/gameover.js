@@ -15,16 +15,16 @@ gameover.prototype = {
         anim.play();
     },
     update: function () {
+        var that=this;
         if (this.escButton.isDown) {
             this.goToMenu();
         } else {
-            this.game.input.keyboard.onPressCallback = this.goToMenu;
+            this.game.input.keyboard.onPressCallback = function(){that.goToMenu(that)};
         }
     },
-    goToMenu: function() {
-        if(this.music != undefined) {
-            this.music.stop();
-        }
+    goToMenu: function(context) {
+        context.music.stop();
+        this.game.state.clearCurrentState();
         this.game.state.start('Menu');
     }
 };

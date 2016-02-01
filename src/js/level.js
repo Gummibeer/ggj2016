@@ -48,9 +48,11 @@ level.prototype = {
     hPlatformVelocities: [],
     vPlatforms: [],
     vPlatformVelocities: [],
+    isGameOver: false,
 
     solvedRituals: 0,
     init: function (config) {
+        this.isGameOver = false;
         this.deathanim = null;
         this.bg = null;
         this.music = null;
@@ -108,10 +110,13 @@ level.prototype = {
         this.createHud();
 
         this.deathanim = this.player.animations.add('death', [2, 10, 11, 12, 13], 5, true);
+        this.registerOnDeathanimEvents();
 
         this.levelTimer = this.game.time.events.add(Phaser.Timer.SECOND * this.config.leveltime, function () {
-            this.killPlayer(true)
+            this.isGameOver = true;
+            this.killPlayer();
         }, this);
+
         this.levelTimer.timer.resume();
 
         this.cursors = this.game.input.keyboard.createCursorKeys();
@@ -121,6 +126,47 @@ level.prototype = {
         this.escButton = this.game.input.keyboard.addKey(Phaser.Keyboard.ESC);
 
         this.canMove = true;
+    },
+    registerOnDeathanimEvents: function(){
+        var that = this;
+        this.deathanim.onComplete.add(function (sprite, animation) {
+            if(this.isGameOver) {
+                setTimeout(function () {
+                    game.state.clearCurrentState();
+                    game.state.start('GameOver');
+                }, 1000, this);
+            } else {
+                setTimeout(function (that) {
+                    that.canMove = true;
+                    that.player.frame = 2;
+                    var info = game.add.graphics();
+                    info.beginFill(0x000000, 0.5);
+                    info.drawRect(220, 35, this.game.width-400, 100);
+                    that.hud.addChild(info);
+                    var _overlayText = game.add.text(0, 0, "OH, NOES! You have lost "+ localStorage.getItem("deadBeans") +" friends");
+                    _overlayText.font = 'Lato';
+                    _overlayText.fontSize = 36;
+                    _overlayText.align = 'center';
+                    _overlayText.fill = '#ffffff';
+                    _overlayText.fontWeight = 'bold';
+                    _overlayText.boundsAlignH = "center";
+                    _overlayText.boundsAlignV = "middle";
+                    _overlayText.setTextBounds(220, 35, this.game.width-400, 100);
+                    var deadico = game.make.sprite(260, 50, 'iconflost');
+                    deadico.scale.x = 0.7;
+                    deadico.scale.y = 0.6;
+                    info.addChild(deadico);
+                    info.addChild(_overlayText);
+                    setTimeout(function(theInfo){
+                        theInfo.destroy();
+                    },2500,info);
+                    that.player.reset(that.config.player.x, that.config.player.y);
+                    that.facing = 'idle';
+                    that.game.physics.p2.resume();
+                    that.music.play();
+                }, 100, that);
+            }
+        },that, 1);
     },
     createBackgrounds: function () {
         var data;
@@ -141,9 +187,11 @@ level.prototype = {
         this.map.addTilesetImage(this.config.tilesForeground);
         this.map.setCollisionByExclusion([]);
         this.layer = this.map.createLayer(this.config.layerCollision);
+        this.layer.renderSettings.enableScrollDelta = false;
         this.createObjects();
         this.createPlayer();
         this.foreground = this.map.createLayer(this.config.layerForeground);
+        this.foreground.renderSettings.enableScrollDelta = false;
         this.layer.debug = this.debug;
         this.layer.resizeWorld();
         this.game.physics.p2.convertTilemap(this.map, this.layer);
@@ -345,6 +393,7 @@ level.prototype = {
         if (this.escButton.isDown) {
             this.game.state.clearCurrentState();
             this.game.state.start('Menu');
+            return true;
         }
 
         if (this.canMove) {
@@ -558,7 +607,8 @@ level.prototype = {
             }
         }
     },
-    killPlayer: function (isGameOver) {
+    killPlayer: function () {
+        this.canMove = false;
         this.player.animations.stop();
         this.player.frame = 10;
         this.game.physics.p2.pause();
@@ -566,46 +616,6 @@ level.prototype = {
         sound.play();
         this.deathanim.loop = false;
         this.countDeadBeans();
-        if (isGameOver) {
-            this.deathanim.onStart.add(function (sprite, animation) {
-                setTimeout(function () {
-                    this.game.state.clearCurrentState();
-                    game.state.start('GameOver');
-                }, 1000);
-            }, this);
-        } else {
-            this.deathanim.onStart.add(function (sprite, animation) {
-                var that = this;
-                setTimeout(function (that) {
-                    that.player.frame = 2;
-                    var info = game.add.graphics();
-                    info.beginFill(0x000000, 0.5);
-                    info.drawRect(220, 35, this.game.width-400, 100);
-                    that.hud.addChild(info);
-                    var _overlayText = game.add.text(0, 0, "OH, NOES! You have lost "+ localStorage.getItem("deadBeans") +" friends");
-                    _overlayText.font = 'Lato';
-                    _overlayText.fontSize = 36;
-                    _overlayText.align = 'center';
-                    _overlayText.fill = '#ffffff';
-                    _overlayText.fontWeight = 'bold';
-                    _overlayText.boundsAlignH = "center";
-                    _overlayText.boundsAlignV = "middle";
-                    _overlayText.setTextBounds(220, 35, this.game.width-400, 100);
-                    var deadico = game.make.sprite(260, 50, 'iconflost');
-                    deadico.scale.x = 0.7;
-                    deadico.scale.y = 0.6;
-                    info.addChild(deadico);
-                    info.addChild(_overlayText);
-                    setTimeout(function(theInfo){
-                        theInfo.destroy();
-                    },2500,info);
-                    that.player.reset(that.config.player.x, that.config.player.y);
-                    that.facing = 'idle';
-                    that.game.physics.p2.resume();
-                    that.music.play();
-                }, 1000, that);
-            }, this);
-        }
         this.music.stop();
         if (!this.deathanim.isPlaying) {
             this.deathanim.play();
