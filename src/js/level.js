@@ -15,6 +15,7 @@ WebFontConfig = {
 level.prototype = {
     debug: false,
 
+    deathanim: null,
     bg: null,
     music: null,
     map: null,
@@ -50,6 +51,7 @@ level.prototype = {
 
     solvedRituals: 0,
     init: function (config) {
+        this.deathanim = null;
         this.bg = null;
         this.music = null;
         this.map = null;
@@ -104,6 +106,8 @@ level.prototype = {
         this.createBackgrounds();
         this.createTilemap();
         this.createHud();
+
+        this.deathanim = this.player.animations.add('death', [2, 10, 11, 12, 13], 5, true);
 
         this.levelTimer = this.game.time.events.add(Phaser.Timer.SECOND * this.config.leveltime, function () {
             this.killPlayer(true)
@@ -560,18 +564,17 @@ level.prototype = {
         this.game.physics.p2.pause();
         var sound = this.game.add.audio('death');
         sound.play();
-        var anim = this.player.animations.add('death', [2, 10, 11, 12, 13], 5, true);
-        anim.loop = false;
+        this.deathanim.loop = false;
         this.countDeadBeans();
         if (isGameOver) {
-            anim.onStart.add(function (sprite, animation) {
+            this.deathanim.onStart.add(function (sprite, animation) {
                 setTimeout(function () {
                     this.game.state.clearCurrentState();
                     game.state.start('GameOver');
                 }, 1000);
             }, this);
         } else {
-            anim.onStart.add(function (sprite, animation) {
+            this.deathanim.onStart.add(function (sprite, animation) {
                 var that = this;
                 setTimeout(function (that) {
                     that.player.frame = 2;
@@ -604,8 +607,8 @@ level.prototype = {
             }, this);
         }
         this.music.stop();
-        if (!anim.isPlaying) {
-            anim.play();
+        if (!this.deathanim.isPlaying) {
+            this.deathanim.play();
         }
     },
     countSolvedRituals: function() {
