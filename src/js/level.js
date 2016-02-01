@@ -90,12 +90,14 @@ level.prototype = {
         this.game.physics.startSystem(Phaser.Physics.P2JS);
         this.game.physics.p2.setImpactEvents(true);
         this.game.physics.p2.gravity.y = 1000;
+        this.game.physics.p2.isPaused = false;
 
         this.bg = this.game.add.tileSprite(0, 0, this.game.width, this.game.height, this.config.background);
         this.bg.fixedToCamera = true;
 
         this.music = this.game.add.audio('theme');
         this.music.loopFull();
+        this.music.play();
 
         this.playerMaterial = this.game.physics.p2.createMaterial();
 
@@ -106,6 +108,7 @@ level.prototype = {
         this.levelTimer = this.game.time.events.add(Phaser.Timer.SECOND * this.config.leveltime, function () {
             this.killPlayer(true)
         }, this);
+        this.levelTimer.timer.resume();
 
         this.cursors = this.game.input.keyboard.createCursorKeys();
         this.jumpButton = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
@@ -146,6 +149,7 @@ level.prototype = {
         this.player.scale.x = 0.35;
         this.player.scale.y = 0.35;
         this.game.physics.p2.enable(this.player);
+        this.game.physics.p2.resume();
         this.player.body.setCircle(25);
         this.player.anchor.setTo(0.5, 0.6);
         this.player.body.collideWorldBounds = true;
@@ -335,6 +339,7 @@ level.prototype = {
     },
     update: function () {
         if (this.escButton.isDown) {
+            this.game.state.clearCurrentState();
             this.game.state.start('Menu');
         }
 
@@ -561,6 +566,7 @@ level.prototype = {
         if (isGameOver) {
             anim.onStart.add(function (sprite, animation) {
                 setTimeout(function () {
+                    this.game.state.clearCurrentState();
                     game.state.start('GameOver');
                 }, 1000);
             }, this);
@@ -634,8 +640,10 @@ level.prototype = {
         this.pause();
         this.player.animations.stop();
         if (this.config.nextLevel != null) {
+            this.game.state.clearCurrentState();
             this.game.state.start('Swap', true, false, this.config.nextLevel);
         } else {
+            this.game.state.clearCurrentState();
             this.game.state.start('GameWon');
         }
     },

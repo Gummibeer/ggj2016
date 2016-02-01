@@ -11,6 +11,7 @@ menu.prototype = {
         this.button = this.game.add.button(300, 200, 'btnstart', this.click, this);
     },
     click: function () {
+        this.game.state.clearCurrentState();
         this.game.state.start('Intro');
     }
 };

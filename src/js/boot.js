@@ -7,6 +7,7 @@ boot.prototype = {
     },
     create: function () {
         this.game.stage.backgroundColor = '#000000';
+        this.game.state.clearCurrentState();
         this.game.state.start('Load');
     }
 };

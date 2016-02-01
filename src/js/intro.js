@@ -19,6 +19,7 @@ intro.prototype = {
     videoEnd: function(myVideo) {
         myVideo.stop();
         myVideo.destroy();
+        this.game.state.clearCurrentState();
         this.game.state.start('Level', true, false, 'config-1');
     },
     shutdown: function() {

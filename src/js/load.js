@@ -62,6 +62,7 @@ load.prototype = {
         this.game.load.audio('gamewon', ['src/audio/gamewon.mp3', 'src/audio/gamewon.ogg']);
     },
     create: function () {
+        this.game.state.clearCurrentState();
         this.game.state.start('Menu');
     }
 };
