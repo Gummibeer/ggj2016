@@ -15,6 +15,7 @@ WebFontConfig = {
 level.prototype = {
     debug: false,
 
+    solvedRitualsText:null,
     deathanim: null,
     bg: null,
     music: null,
@@ -87,6 +88,7 @@ level.prototype = {
         this.vPlatforms = [];
         this.vPlatformVelocities = [];
         this.solvedRituals = 0;
+        this.solvedRitualsText = null;
     },
     create: function () {
         this.config = this.game.cache.getJSON(this.config);
@@ -120,6 +122,7 @@ level.prototype = {
         this.levelTimer.timer.resume();
 
         this.cursors = this.game.input.keyboard.createCursorKeys();
+        this.game.input.keyboard.addKeyCapture([Phaser.Keyboard.SPACEBAR,Phaser.Keyboard.LEFT, Phaser.Keyboard.UP, Phaser.Keyboard.DOWN, Phaser.Keyboard.RIGHT]);
         this.jumpButton = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
         this.takeButton = this.game.input.keyboard.addKey(Phaser.Keyboard.T);
         this.dropButton = this.game.input.keyboard.addKey(Phaser.Keyboard.D);
@@ -280,8 +283,20 @@ level.prototype = {
         timeText.fontWeight = 'bold';
         timeText.align = 'center';
         timeText.fill = '#ffffff';
-        timeText.setShadow(8, 8, 'rgba(0,0,0,0.8)', 8);
+        timeText.setShadow(8, 8, 'rgba(0,0,0,0.9)', 6);
+        var zahnrad = game.make.sprite(this.game.width-100, 20, 'ritual');
+        zahnrad.scale.x = 0.3;
+        zahnrad.scale.y = 0.3;
+        this.solvedRitualsText = game.add.text(game.width-200, 30, "");
+        this.solvedRitualsText.font = 'Lato';
+        this.solvedRitualsText.fontSize = 48;
+        this.solvedRitualsText.fontWeight = 'bold';
+        this.solvedRitualsText.align = 'center';
+        this.solvedRitualsText.fill = '#ffffff';
+        this.solvedRitualsText.setShadow(3, 3, 'rgba(0,0,0,0.9)', 2);
+        this.hud.addChild(zahnrad);
         this.hud.addChild(timeText);
+        this.hud.addChild(this.solvedRitualsText);
         this.timeTween = setInterval(function (timeText) {
             timeText.text = Math.round(game.time.events.duration / 1000);
         }, that.config.leveltime * 1000 / 1000, timeText);
@@ -402,6 +417,8 @@ level.prototype = {
             this.ritualRotate();
             this.wheelRotate();
         }
+
+        this.solvedRitualsText.text = this.solvedRituals + ' / ' + this.config.rituals.length;
 
         if (this.solvedRituals == this.config.rituals.length) {
             this.winPlayer();
@@ -580,6 +597,7 @@ level.prototype = {
         this.currentRitual = null;
         this.levelTimer.timer.resume();
         this.canMove = true;
+        this.player.body.x= this.player.body.x - 3;
         if (succeed) {
             this.destroyObject(spriteBody);
             this.game.physics.p2.isPaused = false;
@@ -627,7 +645,7 @@ level.prototype = {
                 localStorage.setItem("solvedRituals", value);
                 renderScores();
             } else {
-                localStorage.setItem("solvedRituals", 0);
+                localStorage.setItem("solvedRituals", 1);
             }
         } else {
             // Sorry! No Web Storage support..
@@ -640,7 +658,7 @@ level.prototype = {
                 localStorage.setItem("deadBeans", value);
                 renderScores();
             } else {
-                localStorage.setItem("deadBeans", 0);
+                localStorage.setItem("deadBeans", 1);
             }
         } else {
             // Sorry! No Web Storage support..
