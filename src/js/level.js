@@ -442,9 +442,9 @@ level.prototype = {
             if (this.stamps[i].body) {
                 var y = Math.round(this.stamps[i].body.y);
                 if (y < data.y1) {
-                    this.stampVelocities[i] *= Math.abs(this.stampVelocities[i]);
+                    this.stampVelocities[i] = Math.abs(this.stampVelocities[i]);
                 } else if (y > data.y2) {
-                    this.stampVelocities[i] *= Math.abs(this.stampVelocities[i]) * -1;
+                    this.stampVelocities[i] = Math.abs(this.stampVelocities[i]) * -1;
                 }
                 this.stamps[i].body.velocity.y = this.stampVelocities[i];
                 this.stamps[i].body.x = data.x;
@@ -471,9 +471,9 @@ level.prototype = {
             data = this.config.vPlatforms[i];
             y = Math.round(this.vPlatforms[i].body.y);
             if (y < data.y1) {
-                this.vPlatformVelocities[i] *= -1;
+                this.vPlatformVelocities[i] = Math.abs(this.vPlatformVelocities[i]);
             } else if (y > data.y2) {
-                this.vPlatformVelocities[i] *= -1;
+                this.vPlatformVelocities[i] = Math.abs(this.vPlatformVelocities[i]) * -1;
             }
             this.vPlatforms[i].body.velocity.y = this.vPlatformVelocities[i];
             this.vPlatforms[i].body.x = data.x;
