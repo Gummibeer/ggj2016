@@ -441,9 +441,9 @@ level.prototype = {
             if (this.stamps[i].body) {
                 var y = Math.round(this.stamps[i].body.y);
                 if (y < data.y1) {
-                    this.stampVelocities[i] *= -1;
+                    this.stampVelocities[i] *= Math.abs(this.stampVelocities[i]);
                 } else if (y > data.y2) {
-                    this.stampVelocities[i] *= -1;
+                    this.stampVelocities[i] *= Math.abs(this.stampVelocities[i]) * -1;
                 }
                 this.stamps[i].body.velocity.y = this.stampVelocities[i];
                 this.stamps[i].body.x = data.x;
@@ -458,9 +458,9 @@ level.prototype = {
             data = this.config.hPlatforms[i];
             x = Math.round(this.hPlatforms[i].body.x);
             if (x < data.x1) {
-                this.hPlatformVelocities[i] *= -1;
+                this.hPlatformVelocities[i] = Math.abs(this.hPlatformVelocities[i]);
             } else if (x > data.x2) {
-                this.hPlatformVelocities[i] *= -1;
+                this.hPlatformVelocities[i] = Math.abs(this.hPlatformVelocities[i]) * -1;
             }
             this.hPlatforms[i].body.velocity.x = this.hPlatformVelocities[i];
             this.hPlatforms[i].body.y = data.y;
@@ -621,7 +621,6 @@ level.prototype = {
         }
     },
     countSolvedRituals: function() {
-        console.log('countSolvedRituals');
         if (typeof(Storage) !== "undefined") {
             if (localStorage.getItem("solvedRituals")) {
                 var value = parseInt(localStorage.getItem("solvedRituals")) + 1;
