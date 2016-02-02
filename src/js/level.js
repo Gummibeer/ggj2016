@@ -597,7 +597,7 @@ level.prototype = {
         this.currentRitual = null;
         this.levelTimer.timer.resume();
         this.canMove = true;
-        this.player.body.x= this.player.body.x - 3;
+        this.player.body.x= spriteBody.x > this.player.body.x ? this.player.body.x-5 : this.player.body.x+5 ;
         if (succeed) {
             this.destroyObject(spriteBody);
             this.game.physics.p2.isPaused = false;
