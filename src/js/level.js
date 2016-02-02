@@ -622,7 +622,6 @@ level.prototype = {
         }
     },
     countSolvedRituals: function() {
-        console.log('countSolvedRituals');
         if (typeof(Storage) !== "undefined") {
             if (localStorage.getItem("solvedRituals")) {
                 var value = parseInt(localStorage.getItem("solvedRituals")) + 1;
