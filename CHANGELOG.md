@@ -4,7 +4,7 @@
 
 * Hud erweitert, Anzahl der zu findenden und gefundenen Zahnräder wird angezeigt
 * Browser ignoriert nun Space und Pfeiltasten
-* Rituale setzten den player ein Stück auf der x-Achse zurück falls dieser das Rätsel nicht löst
+* Rituale setzen den player ein Stück auf der x-Achse zurück falls dieser das Rätsel nicht löst
 
 ## v1.0.1 - 01.01.2016
 
