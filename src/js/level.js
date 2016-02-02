@@ -124,7 +124,6 @@ level.prototype = {
         this.takeButton = this.game.input.keyboard.addKey(Phaser.Keyboard.T);
         this.dropButton = this.game.input.keyboard.addKey(Phaser.Keyboard.D);
         this.escButton = this.game.input.keyboard.addKey(Phaser.Keyboard.ESC);
-
         this.canMove = true;
     },
     registerOnDeathanimEvents: function(){
